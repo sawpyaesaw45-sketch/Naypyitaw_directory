@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maha Sakkyaramsi Buddha Image</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important; /* Elegant Gold */
+    white-space: nowrap;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F; /* Refined Deep Teal */
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+/* Language Button */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu Theme */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar Responsive Layout */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+/* Search Box Container */
+.search-box {
+    margin-top: 15px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+/* Suggestions List UI */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+/* Hide elements utility */
+.hidden {
+    display: none !important;
+}
+/* Custom Center Alert Box Styles */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* Split Framework Structural Content Layout */
+#home {
+    padding-top: 70px;
+    padding-left: 210px; /* Positions layout area after sidebar ends */
+    min-height: 100vh;
+    background-color: #f4f6f7;
+    display: flex;
+    position: relative;
+}
+
+/* Scroll-linked text lane container sitting between sidebar and image wrapper */
+.scroll-text-container {
+    width: 55%;
+    padding: 40px;
+    padding-bottom: 250px; /* Grants fluid empty buffer scrolling track clearance */
+}
+
+/* Sticky Image Viewport Column on the right hand end frame */
+.sticky-image-container {
+    width: 45%;
+    position: sticky;
+    top: 90px; /* Increased from 70px to create space below the navbar */
+    height: calc(100vh - 180px); /* Reduced height (100vh minus navbar + footer gaps) */
+    overflow: hidden;
+    background-color: #0d2a35;
+    border-radius: 20px; /* Adds rounded corners for the "card" look */
+    margin-top: 20px;    /* Explicit space below navbar */
+    margin-bottom: 20px; /* Explicit space above footer */
+}
+
+/* Ensure the image fills the container */
+.sticky-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px; /* Matches the container corners */
+}
+#stickyTargetImg { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+#stickyTargetMap { width: 100%; height: 100%; display: none; border: 0; }
+/* Text Section Spacing Blocks */
+.scroll-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 80px;
+}
+.info-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border: none;
+    padding: 45px;
+    transition: transform 0.3s ease;
+}
+.park-badge {
+    background-color: rgba(17, 75, 95, 0.1);
+    color: #114B5F;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.info-card h2 {
+    color: #114B5F;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.info-card p {
+    color: #556366;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+.quick-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 25px;
+}
+.meta-pill {
+    background: #f8fafb;
+    border-left: 4px solid #E4B34F;
+    padding: 12px 16px;
+    border-radius: 0 12px 12px 0;
+}
+.meta-pill strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #8c9ba5;
+}
+.meta-pill span {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    color: #114B5F;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #e9ecef;
+    transition: 0.3s;
+}
+.back-btn:hover {
+    background: #E4B34F;
+    color: #114B5F;
+}
+.back-btn i {
+    margin-right: 8px;
+}
+/* Fixed Sticky Footer Layout */
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 4000;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Mobile Overlays */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+#sidebarToggle {
+    display: none;
+}
+
+/* Responsive Adaptive Scale adjustments */
+@media(max-width: 992px) {
+    #home {
+        padding-left: 20px; 
+        flex-direction: column-reverse;
+    }
+    .scroll-text-container {
+        width: 100%;
+        padding: 20px 0 100px 0;
+    }
+    .sticky-image-container {
+        width: 100%;
+        height: 350px;
+        position: relative;
+        top: 0;
+    }
+    .scroll-section {
+        min-height: auto;
+        margin-bottom: 40px;
+    }
+}
+@media(max-width: 768px) {
+    #sidebarToggle { display: block; }
+    .slidebar { transform: translateX(-100%); width: 260px; }
+    .slidebar.active { transform: translateX(0); }
+    .navbar-collapse { display: none !important; }
+    #home { padding-top: 80px; padding-left: 15px; padding-right: 15px; }
+    .quick-meta-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+
+<!-- Header Navbar Navigation Module -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link  txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                 <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Mobile Sidebar -->
+<ul class="slidebar">
+    <!-- Search Box Container -->
+<div class="search-box mb-3 px-2">
+    <div class="search-container">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+        </div>
+        <!-- Search Suggestions Dropdown -->
+        <div id="searchSuggestions" class="suggestions-box hidden"></div>
+    </div>
+</div>
+    <li><a class=" txt-home" href="home.html">Home</a></li>
+   <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="nav-link actived txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+
+<!-- Sections Split Interactive Layout Frame Grid -->
+<section id="home">
+    
+    <!-- Center Screen Text Stream Flow (Left Split) -->
+    <div class="scroll-text-container">
+        <div class="ps-4 mt-3">
+            <a href="senic-spot.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <!-- Section 1: Overview -->
+        <div class="scroll-section" data-image="npt photos\mahar1.webp">
+            <div class="card info-card">
+                <span class="park-badge" id="lblB1"></span>
+                <p id="lblD1"></p>
+                <div class="quick-meta-grid">
+                    <div class="meta-pill"><strong class="txt-loc-tag"></strong><span class="txt-loc-val"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Musical Fountain -->
+        <div class="scroll-section" data-image="npt photos\mahar2.webp">
+            <div class="card info-card">
+                <span class="park-badge" id="lblB2"></span> 
+                <p id="lblD2"></p>
+            </div>
+        </div>
+
+        <!-- Section 3: Night Illumination -->
+        <div class="scroll-section" data-image="npt photos\mahar3.webp">
+    <div class="card info-card">
+        <span class="park-badge" id="lblB3"></span>
+        <p id="lblD3"></p>
+        
+        <!-- နမူနာအတိုင်း <ul> list တစ်ခုတည်းဖြင့် ဆွဲထုတ်မည့်နေရာ -->
+        <ul class="custom-list ps-0" id="galleryList" style="list-style: none;"></ul>
+    </div>
+</div>
+
+        <!-- Section 4: Steel Structure Bridge -->
+        <div class="scroll-section" data-image="npt photos\mahar4.webp">
+            <div class="card info-card">
+                <span class="park-badge" id="lblB4"></span>
+                <p id="lblD4"></p>
+            </div>
+        </div>
+
+        <!-- Section 5: Recreational Grounds -->
+
+<div class="scroll-section" id="last-section">
+    <div class="card info-card">
+        <h2>Location</h2>
+        <p>You can find us at the location shown on the map.</p>
+    </div>
+</div>
+    </div>
+
+    <!-- Right Side Sticky Frame Image Panel (Stays locked on screen frame) -->
+    <div class="sticky-image-container">
+        <img id="stickyTargetImg" src="npt photos/mahar1.webp" alt="Water Fountain Presentation View">
+        <iframe id="stickyTargetMap" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d598.2887617818169!2d96.13963882448996!3d19.869045322985404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e1!3m2!1sen!2smm!4v1784876317377!5m2!1sen!2smm" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+</section>
+
+<!-- Fixed Static Baseline Footer Layout -->
+<footer>
+    <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+<!-- Custom Center Alert Box -->
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+<!-- Bootstrap Bundle JS Component package -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+<script>
+// 1. LOCALIZATION SYSTEM DICTIONARIES
+// 1. LOCALIZATION SYSTEM DICTIONARIES
+const localization = {
+    en: {
+        langBtn: "မြန်မာ",
+        brand: "Naypyitaw Directory",
+        footer: "© 2026 Naypyitaw. All Rights Reserved.",
+        searchPlaceholder: "Search...",
+        home: "Home",
+        categories: "Categories",
+        edu: "Education",
+        scenic: "Scenic Spots",
+        markets: "Markets",
+        hotels: "Hotels & Resorts",
+        about: "About",
+        trip: "Trip planning",
+        contact: "Contact",
+locTag: "Location", 
+locVal: "Ottarathiri Township, Naypyitaw",
+b1: "Overview",  
+d1: "Maha Sakkyaramsi Standing Buddha Image is one of the most prominent and revered religious monuments located in Ottarathiri Township, Naypyitaw. Carved intricately from marble, this grand standing Buddha image represents deep Buddhist devotion, spiritual serenity, and exquisite Burmese marble craftsmanship in the nation's capital.",
+b2: "Key Highlights & Architectural Marvels", 
+d2: "The Buddha image stands majestically within a grand devotional hall. Visitors and pilgrims can pay homage to the imposing standing image, admire the detailed religious carvings surrounding the shrine, and enjoy the tranquil, meditative atmosphere of the temple grounds designed with beautiful traditional Myanmar architecture.",
+b3: "Exhibition",
+d3: "Explore the sacred features and architectural highlights of the temple complex:",
+galleries: [
+    { text: "Maha Sakkyaramsi Standing Marble Buddha Statue", icon: "fa-gopuram" },
+    { text: "Grand Devotional Hall & Shrine Architecture", icon: "fa-place-of-worship" },
+    { text: "Intricate Marble Carvings ", icon: "fa-dharmachakra" },
+    { text: "Serene Temple Courtyard & Meditation Grounds", icon: "fa-leaf" },
+    { text: "Souvenir & Traditional Devotional Goods Stalls", icon: "fa-store" }
+],
+b4: "Visitor Tips & Practical Information",  
+d4: "Located in Ottarathiri Township, the temple is easily accessible via taxi or private car. As a sacred religious site, visitors are required to dress respectfully (covering shoulders and knees) and remove footwear before entering the temple terrace. Morning and late afternoon hours offer the most peaceful atmosphere for homage and photography.", 
+},
+    my: {
+        langBtn: "English",
+        brand: "နေပြည်တော် လမ်းညွှန်",
+        footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။",
+        searchPlaceholder: "ရှာဖွေရန်...",
+        home: "ပင်မစာမျက်နှာ",
+        categories: "ကဏ္ဍများ",
+        edu: "ပညာရေး",
+        scenic: "အပန်းဖြေနေရာများ",
+        markets: "စျေးဝယ်ရန်နေရာများ",
+        hotels: "ဟိုတယ်များ",
+        about: "ကျွန်ုပ်တို့အကြောင်း",
+        trip: "ခရီးစဉ်စီစဉ်ခြင်း",
+        contact: "ဆက်သွယ်ရန်",
+locTag: "တည်နေရာ", 
+locVal: "ဥတ္တရသီရိမြို့နယ်၊ နေပြည်တော်",
+b1: "ခြုံငုံသုံးသပ်ချက်",
+d1: "မဟာသကျရံသီ ရုပ်ရှင်တော်မြတ်ကြီးသည် နေပြည်တော်၊ ဥတ္တရသီရိမြို့နယ်တွင် တည်ရှိသော အထင်ကရ သာသနိက အဆောက်အအုံနှင့် ကြည်ညိုဖွယ်ရာ ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး ဖြစ်သည်။ ကျောက်ဆစ်အတတ်ပညာဖြင့် အနုစိတ် ထုဆစ်ပူဇော်ထားပြီး မြို့တော် နေပြည်တော်၏ ဗုဒ္ဓဘာသာဆိုင်ရာ သက်ဝင်ယုံကြည်မှု၊ စိတ်အေးချမ်းသာမှုနှင့် မြန်မာ့ကျောက်ဆစ် ဗိသုကာလက်ရာများ၏ ခန့်ညားမှုကို ဖော်ပြနေပါသည်။",
+b2: "စိတ်ဝင်စားဖွယ်ရာ ပြခန်းများနှင့် ထူးခြားချက်များ",
+d2: "ရုပ်ရှင်တော်မြတ်ကြီးကို ထည်ဝါလှသော တန်ဆောင်းတော်ကြီး အတွင်း၌ ကိန်းဝပ်စံပယ်တော်မူစေပြီး ကြည်ညိုဖွယ်ရာ ဖူးတွေ့နိုင်သည်။ ဖူးမြော်လာရောက်သူများသည် မတ်ရပ်စက်တော်မူ ရုပ်ပွားတော်ကြီးအား ဖူးမြော်နိုင်ရုံမျှမက ဂန္ဓကုဋိတိုက်အတွင်းရှိ အနုပညာမြောက် ရုပ်ကြွပန်းပုများ၊ ရှေးဟောင်းဗုဒ္ဓဝင် ပြကွက်များနှင့် အေးချမ်းလှသော ဘုရားဝန်းကျင် ပတ်ဝန်းကျင်ကို ခံစားနိုင်သည်။",
+b3: "ပြပွဲကဏ္ဍ",
+d3: "မဟာသကျရံသီ ဘုရားဝန်းအတွင်း စိစစ်ဖူးမြော်နိုင်သည့် အဓိက သာသနိက နေရာများ -",
+galleries: [
+    { text: "မဟာသကျရံသီ ကျောက်ဆစ် ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး", icon: "fa-gopuram" },
+    { text: "ထည်ဝါလှသော ပင်မတန်ဆောင်းတော်ကြီးနှင့် ဂန္ဓကုဋိတိုက်", icon: "fa-place-of-worship" },
+    { text: "အနုစိတ် ထုဆစ်ထားသော ကျောက်ဆစ်ရုပ်ကြွများ", icon: "fa-dharmachakra" },
+    { text: "စိတ်အေးချမ်းသာဖွယ် တရားဘာဝနာပွားများရန် ဘုရားရင်ပြင်တော်", icon: "fa-leaf" },
+    { text: "ဘုရားဖူး အမှတ်တရနှင့် သာသနိက အသုံးအဆောင် အရောင်းဆိုင်များ", icon: "fa-store" }
+],
+b4: "လာရောက်လည်ပတ်သူများအတွက် သိကောင်းစရာများ",
+d4: "ဥတ္တရသီရိမြို့နယ်အတွင်း တည်ရှိပြီး အငှားယာဉ် သို့မဟုတ် ကိုယ်ပိုင်ကားဖြင့် လွယ်ကူစွာ လာရောက်နိုင်ပါသည်။ အလေးအမြတ်ထားရာ သာသနိကနေရာဖြစ်သဖြင့် ပုခုံးနှင့် ဒူးဖုံးသော ယဉ်ကျေးသည့် အဝတ်အစားများ ဝတ်ဆင်ရန်နှင့် ရင်ပြင်တော်မတက်မီ ဖိနပ်ချွတ်ရန် လိုအပ်ပါသည်။ နံနက်စောစော သို့မဟုတ် ညနေပိုင်းတွင် ပတ်ဝန်းကျင် ပိုမိုအေးချမ်းပြီး ဖူးမြော်ရန် အကောင်းဆုံး ဖြစ်ပါသည်။",
+}
+};
+
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+// 2. RENDERING ENGINE TRANSLATION ASSIGNMENT
+function updateLanguage() {
+    const data = localization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+
+    // Direct Elements Context binding loops
+    document.getElementById('lblB1').textContent = data.b1; document.getElementById('lblD1').textContent = data.d1;
+    document.getElementById('lblB2').textContent = data.b2; document.getElementById('lblD2').textContent = data.d2;
+    document.getElementById('lblB3').textContent = data.b3; document.getElementById('lblD3').textContent = data.d3;
+    document.getElementById('lblB4').textContent = data.b4; document.getElementById('lblD4').textContent = data.d4;
+
+    document.querySelectorAll('.txt-loc-tag').forEach(el => el.textContent = data.locTag);
+    document.querySelectorAll('.txt-loc-val').forEach(el => el.textContent = data.locVal);
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+
+    // [ပြင်ဆင်ချက်] ပြခန်းများကို Dynamic ဆွဲထုတ်ပေးသည့်ကုဒ်ကို updateLanguage အတွင်းပိုင်းသို့ ပြောင်းရွှေ့ထားသည်
+    const galleryList = document.getElementById('galleryList');
+    if (galleryList && data.galleries) {
+        galleryList.innerHTML = ''; // အဟောင်းများကို ရှင်းထုတ်ခြင်း
+        data.galleries.forEach(gallery => {
+            const li = document.createElement('li');
+            li.className = "mb-3 d-flex align-items-center"; 
+            li.innerHTML = `
+                <div class="bg-opacity-10 bg-primary p-2 rounded-circle me-3 text-primary text-center d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
+                    <i class="fa-solid ${gallery.icon}"></i>
+                </div>
+                <span class="fw-semibold text-dark" style="font-size: 1.05rem;">${gallery.text}</span>
+            `;
+            galleryList.appendChild(li);
+        });
+    }
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+document.addEventListener('DOMContentLoaded', updateLanguage);
+
+// 3. SYNCHRONIZED SCROLL TRIGGER SCRIPT (TEXT + IMAGE SWITCH)
+const scrollSections = document.querySelectorAll('.scroll-section');
+const stickyImg = document.getElementById('stickyTargetImg');
+const stickyMap = document.getElementById('stickyTargetMap');
+
+window.addEventListener('scroll', () => {
+    let activeImageUrl = "";
+    let isLastSectionActive = false;
+    
+    scrollSections.forEach(section => {
+        const bounds = section.getBoundingClientRect();
+        if (bounds.top <= window.innerHeight / 2 && bounds.bottom >= 100) {
+            activeImageUrl = section.getAttribute('data-image');
+            if (section.id === 'last-section') isLastSectionActive = true;
+        }
+    });
+
+    if (isLastSectionActive) {
+        stickyImg.style.display = 'none';
+        stickyMap.style.display = 'block';
+    } else {
+        stickyImg.style.display = 'block';
+        stickyMap.style.display = 'none';
+        if (activeImageUrl && stickyImg.src !== activeImageUrl) {
+            stickyImg.style.opacity = '0';
+            setTimeout(() => {
+                stickyImg.src = activeImageUrl;
+                stickyImg.style.opacity = '1';
+            }, 300);
+        }
+    }
+});
+
+// CORE INTERACTIVE DRAWER MENU HANDLERS
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+overlay.onclick = function () {
+    sidebar.classList.remove("active"); 
+    overlay.classList.remove("show");
+};
+document.querySelectorAll(".slidebar a").forEach(link => {
+    link.onclick = function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+    };
+});
+
+</script>
+</body>
+</html>

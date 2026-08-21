@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scenic Spots - Naypyitaw Directory</title>
+
+<!-- Bootstrap CSS & FontAwesome -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    background-color: #f4f6f7;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Core Global Navigation Framework Theme --- */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important; /* Elegant Gold */
+    white-space: nowrap;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F; /* Refined Deep Teal */
+    z-index: 3000;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+/* Nav Language Button Layout */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu Theme */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar Responsive Layout */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+/* Search Box Container */
+.search-box {
+    margin-top: 40px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+/* Suggestions List UI */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+/* Hide elements utility */
+.hidden {
+    display: none !important;
+}
+/* Custom Center Alert Box Styles */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+#scenic-section {
+    flex: 1;
+    padding-left: 210px;
+    padding-top: 70px;
+    padding-bottom: 60px;
+    transition: all 0.35s ease;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show { display: block; }
+#sidebarToggle { display: none; }
+
+.hero-banner {
+    background: linear-gradient(rgba(17, 75, 95, 0.85), rgba(17, 75, 95, 0.95)), 
+                url('https://images.unsplash.com/photo-1543731068-7e0f5beff43a?q=80&w=1920') center/cover no-repeat;
+    padding: 60px 20px;
+    text-align: center;
+    color: white;
+}
+.hero-banner h1 { font-weight: 700; font-size: 2.5rem; margin-bottom: 12px; }
+.hero-banner p { color: rgba(255, 255, 255, 0.85); font-size: 1.1rem; }
+
+.search-container { max-width: 550px; margin: -25px auto 0 auto; position: relative; z-index: 5; }
+.search-input { border-radius: 30px; padding: 12px 25px 12px 45px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.search-icon { position: absolute; left: 20px; top: 15px; color: #114B5F; }
+
+.filter-container { margin: 35px 0; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.filter-btn { background: white; border: 1px solid rgba(17, 75, 95, 0.15); color: #114B5F; padding: 8px 22px; border-radius: 30px; font-weight: 500; font-size: 0.9rem; transition: all 0.3s ease; cursor: pointer; }
+.filter-btn.active, .filter-btn:hover { background: #114B5F; color: #E4B34F; box-shadow: 0 4px 12px rgba(17, 75, 95, 0.15); }
+
+/* Landmark Cards */
+.content-card { background: white; border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; margin-bottom: 25px; height: 100%; display: flex; flex-direction: column; }
+.content-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.img-wrapper { position: relative; height: 200px; background: #eaeaea; width: 100%; }
+.img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.tag-badge { position: absolute; top: 15px; left: 15px; background: #E4B34F; color: #114B5F; font-weight: 600; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
+.card-body-content { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.card-body-content h3 { font-size: 1.25rem; color: #114B5F; font-weight: 600; margin-bottom: 12px; }
+.info-line { font-size: 0.88rem; color: #666; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.info-line i { color: #114B5F; width: 16px; }
+.action-link { display: inline-block; margin-top: 15px; color: #114B5F; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; }
+.action-link:hover { color: #E4B34F; }
+
+.card-item { transition: all 0.4s ease; }
+.card-item.hidden { display: none !important; opacity: 0; transform: scale(0.9); }
+
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 16px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2600;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+}
+footer p { margin: 0; font-size: 0.9rem; }
+
+@media(max-width: 992px) {
+    #scenic-section { padding-left: 0; }
+}
+@media(max-width: 768px) {
+    #sidebarToggle { display: block; }
+    .slidebar { transform: translateX(-100%); width: 260px; }
+    .slidebar.active { transform: translateX(0); }
+    .navbar-collapse { display: none !important; }
+    .dropdown-item { color: #fff; padding: 10px 16px; margin-left: 20px; }
+    .hero-banner h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+
+<!-- Header Navbar Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+       
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Mobile Drawer Sidebar Navigation -->
+<ul class="slidebar">
+    <!-- Search Box Container -->
+<div class="search-box mb-3 px-2">
+    <div class="search-container">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+        </div>
+        <!-- Search Suggestions Dropdown -->
+        <div id="searchSuggestions" class="suggestions-box hidden"></div>
+    </div>
+</div>
+    <li><a class="txt-home" href="home.html">Home</a></li>
+    <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="actived nav-link txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+
+<!-- Main Layout Content Section -->
+<main id="scenic-section">
+    <div class="hero-banner">
+        <div class="container position-relative">
+            <a href="categories.html" class="btn btn-sm btn-outline-light position-absolute start-0 top-0 txt-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <h1 id="heroTitle">Scenic Spots</h1>
+            <p id="heroSubtitle">Explore gorgeous pagodas, vast botanical fields, and animal sanctuaries</p>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Live Search Field -->
+
+        <!-- Filter Buttons -->
+
+        <!-- Cards Grid with Multi-language Data Attributes -->
+        <div class="row g-4" id="cardsGrid">
+            
+            <!-- Item 1 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="pagodas">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\Uppasanti1.jpg" alt="Uppatasanti">
+                        <div class="tag-badge" data-en="Pagoda" data-my="စေတီတော်">Pagoda</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Uppatasanti Pagoda" data-my="ဥပ္ပါတသန္တိ စေတီတော်">Uppatasanti Pagoda</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Pobbathiri Township" data-my="ပုဗ္ဗသီရိမြို့နယ်">Pobbathiri Township</span>
+                        </div>
+                        <a href="Uppsanti.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\waterfountain1.webp" alt="Water Fountain">
+                        <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Water Fountain Park" data-my="ရေပန်းဥယျာဉ်">Water Fountain Park</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zabuthiri Township" data-my="ဇမ္ဗူသီရိမြို့နယ်">Zabuthiri Township</span>
+                        </div>
+                        <a href="waterfountain.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\safari1.jpg" alt="Zoo">
+                         <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Naypyitaw Safari Park" data-my="နေပြည်တော် ဆာဖာရီဥယျာဉ်">Naypyitaw Safari Park</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zeyarthiri Township" data-my="ဇေယျာသီရိမြို့နယ်">Zeyarthiri Township</span>
+                        </div>
+                        <a href="Nay Pyi Taw Safari Park.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="pagodas">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\maravijaya4.jpg" alt="maravijaya buddha statue">
+                        <div class="tag-badge" data-en="Pagoda" data-my="စေတီတော်">Pagoda</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Maravijaya Buddha Statue" data-my="မာရဝိဇယ ဗုဒ္ဓရုပ်ပွားတော်">Maravijaya Buddha Statue</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Dekkhinathiri Township" data-my="ဒက္ခိဏသီရိမြို့နယ်">Dekkhinathiri Township</span>
+                        </div>
+                        <a href="Maravijaya.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/nml1.webp" alt="National Landmark Garden">
+                        <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="National Landmark Garden" data-my="အမျိုးသားအထိမ်းအမှတ်ဉယျာဉ်">National Landmark Garden</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zeyarthiri Township" data-my="ဇေယျာသီရိမြို့နယ်">Zeyarthiri Township</span>
+                        </div>
+                        <a href="National Landmark Garden.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/zoo1.jpg" alt="Naypyidaw Zoological Gardens">
+                        <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Naypyidaw Zoological Gardens" data-my="နေပြည်တော် တိရစ္ဆာန်ဥယျာဉ်">Naypyidaw Zoological Gardens</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zeyarthiri Township" data-my="ဇေယျာသီရိမြို့နယ်">Zeyarthiri Township</span>
+                        </div>
+                        <a href="Naypyidaw Zoological Gardens.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 7 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/unnamed.webp" alt="Pinlaung Hot Spring Resort">
+                        <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Pinlong Hot Spring Resort" data-my="ပင်လုံ ရေပူစမ်း အပန်းဖြေစခန်း">Pinlong Hot Spring Resort</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Tatkon Township" data-my="တပ်ကုန်းမြို့နယ်">Tatkon Township</span>
+                        </div>
+                        <a href="Hot Spring Resort.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 8 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="parks">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\pnpt1.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Parks & Gardens" data-my="ပန်းခြံနှင့် ဥယျာဉ်">Parks & Gardens</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="PNPT Resort" data-my="PNPT အပန်းဖြေစခန်း">PNPT Resort</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Pyinmana Township" data-my="ပျဉ်းမနားမြို့နယ်">Pyinmana Township</span>
+                        </div>
+                        <a href="PNPT.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 9 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="pagodas">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/buhhagaya1.jpg" alt="PNPT">
+                        <div class="tag-badge" data-en="Pagoda" data-my="စေတီတော်">Pagoda</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Buddhagaya Thatta Thattaha Maha Bawdi Pagoda" data-my="သတ္တသတ္တာဟ မဟာဗောဓိစေတီတော်">Buddhagaya Thatta Thattaha Maha Bawdi Pagoda</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Ottarathiri Township" data-my="ဥတ္တရသီရိမြို့နယ်">Ottarathiri Township</span>
+                        </div>
+                        <a href="Buddhagaya.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 10 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="pagodas">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hkt1.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Pagoda" data-my="စေတီတော်">Pagoda</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Hlay Khwe Taung Pagoda" data-my="လှေခွင်းတောင် စေတီတော်">Hlay Khwe Taung Pagoda</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Tatkon Township" data-my="တပ်ကုန်းမြို့နယ်">Tatkon Township</span>
+                        </div>
+                        <a href="Hlay Khwe Taung.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 11 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="pagodas">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/mahar2.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Pagoda" data-my="စေတီတော်">Pagoda</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Maha Sakkyaramsi Standing Buddha Image" data-my="မဟာသကျရံသီ ရပ်တော်မူ ရုပ်ပွားတော်">Maha Sakkyaramsi Standing Buddha Image</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Ottarathiri Township" data-my="ဥတ္တရသီရိမြို့နယ်">Ottarathiri Township</span>
+                        </div>
+                        <a href="Maha Sakkyaramsi.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 12 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="museums and stadiums">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/nm1.jpg" alt="PNPT">
+                        <div class="tag-badge" data-en="Museums" data-my="ပြတိုက်">Museums</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="National Museum" data-my="အမျိုးသားပြတိုက်">National Museum</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Ottarathiri Township" data-my="ဥတ္တရသီရိမြို့နယ်">Ottarathiri Township</span>
+                        </div>
+                        <a href="National Museum.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 13 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="museums and stadiums">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/defence1.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Museums" data-my="ပြတိုက်">Museums</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Defense Services Museum" data-my="တပ်မတော်စစ်သမိုင်းပြတိုက်">Defense Services Museum</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zeyarthiri Township" data-my="ဇေယျာသီရိမြို့နယ်">Zeyarthiri Township</span>
+                        </div>
+                        <a href="defence service.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 14 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="museums and stadiums">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\image8.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Museums" data-my="ပြတိုက်">Museums</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Memorial to Fallen Heroes" data-my="သူရဲကောင်းဗိမာန်">Memorial to Fallen Heroes</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zeyarthiri Township" data-my="ဇေယျာသီရိမြို့နယ်">Zeyarthiri Township</span>
+                        </div>
+                        <a href="memorise to fallen.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 15 -->
+            <div class="col-xl-4 col-md-6 card-item" data-category="museums and stadiums">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos\stadium1.webp" alt="PNPT">
+                        <div class="tag-badge" data-en="Stadium" data-my="အားကစားကွင်း">Stadium</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3 data-en="Wunna Theikdi Stadium" data-my="ဝဏ္ဏသိဒ္ဓိ အားကစားကွင်း">Wunna Theikdi Stadium</h3>
+                        <div class="info-line">
+                            <i class="fa-solid fa-location-dot"></i> 
+                            <span data-en="Zabuthiri Township" data-my="ဇမ္ဗူသီရိမြို့နယ်">Zabuthiri Township</span>
+                        </div>
+                        <a href="Wunna Theikdi Stadium.html" class="action-link txt-view-details">View Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- Bottom Footer Frame -->
+<footer>
+    <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+<!-- Custom Center Alert Box -->
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+<script>
+// 1. EXPANDED DICTIONARY DATASHEET
+const localization = {
+    en: {
+        langBtn: "မြန်မာ",
+        brand: "Naypyitaw Directory",
+        home: "Home",
+        categories: "Categories",
+        edu: "Education",
+        scenic: "Scenic Spots",
+        markets: "Markets",
+        hotels: "Hotels & Resorts",
+        about: "About",
+        trip: "Trip planning",
+        contact: "Contact",
+        searchPlaceholder: "Search...",
+        footer: "© 2026 Naypyitaw. All Rights Reserved.",
+        
+        backBtn: "<i class='fa-solid fa-arrow-left'></i> Back",
+        heroTitle: "Scenic Spots",
+        heroSubtitle: "Explore gorgeous pagodas, vast botanical fields, and animal sanctuaries",
+        inputSearch: "Search destinations by name or details...",
+        filterAll: "All Landmarks",
+        filterPagodas: "Pagodas",
+        filterParks: "Parks & Gardens",
+        filterMuseums: "Museums & Stadiums",
+        viewDetails: "View Details <i class='fa-solid fa-chevron-right ms-1'></i>"
+    },
+    my: {
+        langBtn: "English",
+        brand: "နေပြည်တော် လမ်းညွှန်",
+        home: "ပင်မစာမျက်နှာ",
+        categories: "ကဏ္ဍများ",
+        edu: "ပညာရေး",
+        scenic: "အပန်းဖြေနေရာများ",
+        markets: "စျေးဝယ်ရန်နေရာများ",
+        hotels: "ဟိုတယ်နှင့် ရီဆော့တ်များ",
+        about: "ကျွန်ုပ်တို့အကြောင်း",
+        trip: "ခရီးစဉ်စီစဉ်ခြင်း",
+        contact: "ဆက်သွယ်ရန်",
+        searchPlaceholder: "ရှာဖွေရန်...",
+        footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။",
+        
+        backBtn: "<i class='fa-solid fa-arrow-left'></i> နောက်သို့",
+        heroTitle: "အပန်းဖြေလည်ပတ်စရာနေရာများ",
+        heroSubtitle: "လှပဆန်းပြားသော စေတီပုထိုးများ၊ ကျယ်ဝန်းလှသော ရုက္ခဗေဒဥယျာဉ်များနှင့် တိရစ္ဆာန်ဘေးမဲ့တောများကို လေ့လာလိုက်ပါ",
+        inputSearch: "နေရာများကို အမည် သို့မဟုတ် အချက်အလက်ဖြင့် ရှာဖွေရန်...",
+        filterAll: "နေရာအားလုံး",
+        filterPagodas: "စေတီပုထိုးများ",
+        filterParks: "ပန်းခြံနှင့် ဥယျာဉ်များ",
+        filterMuseums: "ပြတိုက်နှင့်အားကစားကွင်းများ",
+        viewDetails: "အသေးစိတ်ကြည့်ရန် <i class='fa-solid fa-chevron-right ms-1'></i>"
+    }
+};
+
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+// 2. INTEGRATED TRANSLATION ENGINE (WITH Dynamic Cards support)
+function updateLanguage() {
+    const data = localization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+    
+    document.querySelector('.txt-back').innerHTML = data.backBtn;
+    document.getElementById('heroTitle').textContent = data.heroTitle;
+    document.getElementById('heroSubtitle').textContent = data.heroSubtitle;
+
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+    document.querySelectorAll('.txt-view-details').forEach(el => el.innerHTML = data.viewDetails);
+
+    // Loop through cards attributes and switch titles, tags & townships
+    document.querySelectorAll('[data-en][data-my]').forEach(el => {
+        const translatedText = el.getAttribute(`data-${currentLang}`);
+        if (translatedText) {
+            el.textContent = translatedText;
+        }
+    });
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', updateLanguage);
+
+// 3. LIVE SEARCH FILTER AND INTERACTION CORES
+document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-container .filter-btn');
+    const cardItems = document.querySelectorAll('.card-item');
+    const searchInput = document.getElementById('searchInput');
+
+    function filterCards() {
+        const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+        const searchQuery = searchInput.value.toLowerCase().trim();
+
+        cardItems.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            const cardText = card.textContent.toLowerCase();
+            
+            const matchesCategory = (activeFilter === 'all' || cardCategory === activeFilter);
+            const matchesSearch = cardText.includes(searchQuery);
+
+            if (matchesCategory && matchesSearch) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterCards();
+        });
+    });
+});
+
+// 4. MOBILE DRAWER OVERLAY CONTROLLERS
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+
+document.querySelectorAll(".slidebar a").forEach(link => {
+    link.onclick = function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+    };
+});
+</script>
+</body>
+</html>

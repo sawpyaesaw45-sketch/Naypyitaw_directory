@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education - Naypyitaw Directory</title>
+
+<!-- Bootstrap CSS & FontAwesome Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f6f7;
+}
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F;
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+/* Nav Language Button Styling */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+    color: #fff;
+    font-size: 2.5vh;
+}
+
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+/* Search Box tweaks */
+.search-box {
+    margin-top: 15px;
+}
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+/* Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+#sidebarToggle {
+    display: none;
+}
+/* --- RIGHT MAIN CONTENT AREA --- */
+.content-area {
+    flex: 1;
+    margin-left: 260px; /* Push content to right of sidebar */
+    padding: 30px;
+}
+.hero-banner {
+    background: linear-gradient(rgba(17, 75, 95, 0.85), rgba(17, 75, 95, 0.95)), 
+                url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920') center/cover no-repeat;
+    padding: 60px 20px; text-align: center; color: white;
+}
+/* Ensure main content uses the same ID for sidebar alignment */
+#edu-section { flex: 1; padding-left: 210px; padding-top: 70px; transition: all 0.35s ease; }
+@media(max-width: 992px) { #edu-section { padding-left: 0; } }
+
+/* Use the same card-item and hidden classes as the Scenic page */
+.edu-item-card { transition: all 0.4s ease; }
+.edu-item-card.hidden { display: none !important; }
+/* --- MIDDLE FILTER BUTTONS & CARDS --- */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: white;
+    border: 1px solid #114B5F;
+    color: #114B5F;
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+    margin-top: 30px;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: #114B5F;
+    color: white;
+}
+
+/* Cards Design */
+.edu-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    height: 100%;
+    border: 1px solid #eef2f5;
+}
+
+.edu-card:hover {
+    transform: translateY(-5px);
+}
+
+.edu-img-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+.edu-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge-type {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #114B5F;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.edu-body {
+    padding: 20px;
+}
+
+.edu-body h5 {
+    font-weight: 600;
+    color: #114B5F;
+    margin-bottom: 12px;
+}
+
+.edu-meta {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+/* Update your main and footer styles to ensure the layout forces the footer down */
+main { 
+    padding-bottom: 80px;
+    background-color: #f4f6f7;
+    flex: 1 0 auto;
+}
+.action-link { display: inline-block; margin-top: 15px; color: #114B5F; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; cursor: pointer;}
+.action-link:hover { color: #E4B34F; }
+
+/* Modal Styling */
+.modal-header {
+    background-color: #114B5F;
+    color: white;
+}
+.modal-header .btn-close {
+    filter: invert(1) grayscale(1) brightness(2);
+}
+.modal-title-custom {
+    font-weight: 600;
+}
+.info-label {
+    font-weight: 600;
+    color: #114B5F;
+}
+
+/* Update your footer */
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 4000;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustment */
+@media (max-width: 991px) {
+    .content-area {
+        margin-left: 0;
+    }
+    .desktop-menu {
+        display: none;
+    }
+     #sidebarToggle {
+        display: block;
+    }
+
+    .slidebar {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+
+    .slidebar.active {
+        transform: translateX(0);
+    }
+
+    .navbar-collapse {
+        display: none !important;
+    }
+
+    .dropdown-item {
+        margin-left: 20px;
+    }
+    footer {
+        padding-left: 0;
+    }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+
+<!-- Header Navbar Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+       
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="#cat2">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="#cat3">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="#cat4">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item"><button class="nav-lang-btn langToggleBtn" id="langToggle">မြန်မာ</button></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Mobile Drawer Sidebar Layout -->
+<ul class="slidebar">
+    <div class="search-box mb-3 px-2">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." />
+        </div>
+    </div>
+    <li><a class="txt-home" href="home.html">Home</a></li>
+    <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="actived txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="scenic.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="markets.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-trip" href="portfolio.html">Trip planning</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-3 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill langToggleBtn" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+
+<main id="edu-section">
+    <div class="hero-banner">
+        <div class="container position-relative">
+            <h1 id="heroTitle">Education</h1>
+            <p id="heroSubtitle">Explore universities in Naypyitaw</p>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-container">
+        <button class="filter-btn active" data-filter="university">Universities</button>
+    </div>
+
+    <!-- Grid Items -->
+    <div class="container">
+        <div class="row g-4" id="cardsGrid">
+            <!-- University Card 1: Yezin -->
+            <div class="col-md-4 edu-item-card" data-category="university">
+                <div class="edu-card">
+                    <div class="edu-img-wrapper">
+                        <img src="https://pbs.twimg.com/profile_images/1265872419832684546/fBWv2wqb_400x400.jpg" alt="Yezin University">
+                        <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+                    </div>
+                    <div class="edu-body">
+                        <h5 class="cardTitle" data-en="Yezin Agricultural University" data-my="ရေဆင်းစိုက်ပျိုးရေးတက္ကသိုလ်">Yezin Agricultural University</h5>
+                        <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zeyarthiri Township, Naypyitaw" data-my="ဇေယျာသီရိမြို့နယ်၊ နေပြည်တော်">Zeyarthiri Township, Naypyitaw</span></div>
+                        <p class="cardDesc text-muted small mt-2" data-en="The premier agricultural university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန် စိုက်ပျိုးရေးဆိုင်ရာ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier agricultural university offering specialized undergraduate and postgraduate degrees.</p>
+                        <a class="action-link" onclick="openDetails('yezin')"><span class="txt-explore">Check Details</span> <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- University Card 2: NSA -->
+            <div class="col-md-4 edu-item-card" data-category="university">
+                <div class="edu-card">
+                    <div class="edu-img-wrapper">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThdyrZkL4r__eOEM6kF0xNZkfmUgGVXQ0ulKFqblslsQ&s=10" alt="NSA">
+                        <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+                    </div>
+                    <div class="edu-body">
+                        <h5 class="cardTitle" data-en="Nay Pyi Taw State Academy" data-my="နေပြည်တော် နိုင်ငံတော်အကယ်ဒမီ">Nay Pyi Taw State Academy</h5>
+                        <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zabuthiri Township, Naypyitaw" data-my="ဇမ္ဗူသီရိမြို့နယ်၊ နေပြည်တော်">Zabuthiri Township, Naypyitaw</span></div>
+                        <p class="cardDesc text-muted small mt-2" data-en="A comprehensive higher education institution providing arts, science, and medical courses." data-my="ဝိဇ္ဇာ၊ သိပ္ပံနှင့် ဆေးပညာရပ်ဆိုင်ရာ သင်တန်းများကို ဘက်စုံသင်ကြားပေးသော အဆင့်မြင့်ပညာရေးတက္ကသိုလ်။">A comprehensive higher education institution providing arts, science, and medical courses.</p>
+                        <a class="action-link" onclick="openDetails('nsa')"><span class="txt-explore">Check Details</span> <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- University Card 3: NSPU -->
+            <div class="col-md-4 edu-item-card" data-category="university">
+                <div class="edu-card">
+                    <div class="edu-img-wrapper">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9x_rKxixRtMMRUpyqj5JLg2olp0eQVBkQpUT2pW1dWl4E56hO01s_AFw&s=10" alt="NSPU">
+                        <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+                    </div>
+                    <div class="edu-body">
+                        <h5 class="cardTitle" data-en="Nay Pyi Taw State Polytechnic University" data-my="နေပြည်တော် နိုင်ငံတော် နည်းပညာတက္ကသိုလ်">Nay Pyi Taw State Polytechnic University</h5>
+                        <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zeyarthiri Township, Naypyitaw" data-my="ဇေယျာသီရိမြို့နယ်၊ နေပြည်တော်">Zeyarthiri Township, Naypyitaw</span></div>
+                        <p class="cardDesc text-muted small mt-2" data-en="Offering advanced technical, engineering, and vocational higher education programs." data-my="အဆင့်မြင့် နည်းပညာ၊ အင်ဂျင်နီယာနှင့် အသက်မွေးဝမ်းကျောင်းဆိုင်ရာ ပညာရပ်များကို သင်ကြားပေးသော တက္ကသိုလ်။">Offering advanced technical, engineering, and vocational higher education programs.</p>
+                        <a class="action-link" onclick="openDetails('nspu')"><span class="txt-explore">Check Details</span> <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Details Modal Dynamic Structure -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title modal-title-custom" id="modalTitle">University Details</h5>
+        <button type="button" class="btn-close" data-bs-submit="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Content will be injected dynamically via Javascript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER FRAMEWORK -->
+<footer>
+   <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- INTERACTIVE ENGINE LOGIC SCRIPT -->
+<script>
+    const localization = {
+        en: {
+            langBtn: "မြန်မာ",
+            brand: "Naypyitaw Directory",
+            home: "Home",
+            categories: "Categories",
+            edu: "Education",
+            scenic: "Scenic Spots",
+            markets: "Markets",
+            hotels: "Hotels & Resorts",
+            about: "About",
+            trip: "Trip planning",
+            contact: "Contact",
+            searchPlaceholder: "Search...",
+            explore: "Check Details",
+            footer: "© 2026 Naypyitaw. All Rights Reserved.",
+            heroTitle: "Education",
+            heroSubtitle: "Explore universities in Naypyitaw",
+            btnUni: "Universities",              
+            uniBadge: "University",
+            // Modal Detail Labels
+            lblEst: "Established",
+            lblMajors: "Key Programs / Majors",
+            lblReq: "Admission Requirements",
+            lblContact: "Contact Information"
+        },
+        my: {
+            langBtn: "English",
+            brand: "နေပြည်တော် လမ်းညွှန်",
+            home: "ပင်မစာမျက်နှာ",
+            categories: "ကဏ္ဍများ",
+            edu: "ပညာရေး",
+            scenic: "အပန်းဖြေနေရာများ",
+            markets: "စျေးဝယ်ရန်နေရာများ",
+            hotels: "ဟိုတယ်နှင့် ရီဆော့တ်များ",
+            about: "ကျွန်ုပ်တို့အကြောင်း",
+            trip: "ခရီးစီစဉ်ခြင်း",
+            contact: "ဆက်သွယ်ရန်",
+            searchPlaceholder: "ရှာဖွေရန်...",
+            explore: "အသေးစိတ်ကြည့်ရန်",
+            footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။",
+            heroTitle: "ပညာရေး",
+            heroSubtitle: "နေပြည်တော်ရှိ တက္ကသိုလ်များကို လေ့လာပါ",
+            btnUni: "တက္ကသိုလ်များ",
+            uniBadge: "တက္ကသိုလ်",
+            lblEst: "တည်ထောင်သည့်နှစ်",
+            lblMajors: "သင်ကြားပေးသော မေဂျာများ",
+            lblReq: "ဝင်ခွင့်သတ်မှတ်ချက်",
+            lblContact: "ဆက်သွယ်ရန် အချက်အလက်"
+        }
+    };
+
+    // Detailed Information Database
+    const universityDetails = {
+        yezin: {
+            en: {
+                title: "Yezin Agricultural University (YAU)",
+                est: "1924",
+                majors: "Agronomy, Plant Breeding, Soil Science, Entomology, Plant Pathology, Horticulture, Agricultural Economics.",
+                requirements: "High matriculation exam scores specifically in science subjects (Biology, Chemistry, Physics).",
+                contact: "Phone: +95 67 3416655 | Website: www.yau.edu.mm"
+            },
+            my: {
+                title: "ရေဆင်းစိုက်ပျိုးရေးတက္ကသိုလ်",
+                est: "၁၉၂၄",
+                majors: "လယ်ယာသီးနှံပညာ၊ သီးနှံမျိုးပွားပညာ၊ မြေဆီလွှာသိပ္ပံ၊ ပိုးမွှားဗေဒ၊ အပင်ရောဂါဗေဒ၊ ဥယျာဉ်ခြံသီးနှံပညာ၊ စိုက်ပျိုးရေးစီးပွားရေးပညာ။",
+                requirements: "တက္ကသိုလ်ဝင်တန်းစာမေးပွဲတွင် ဇီဝဗေဒ၊ ဓာတုဗေဒ၊ ရူပဗေဒ အမှတ်ကောင်းမွန်သူများ လျှောက်ထားနိုင်သည်။",
+                contact: "ဖုန်း: ၀၆၇-၃၄၁၆၆၅၅ | ဝက်ဘ်ဆိုက်: www.yau.edu.mm"
+            }
+        },
+        nsa: {
+            en: {
+                title: "Nay Pyi Taw State Academy",
+                est: "2022",
+                majors: "Arts & Sciences, Medicine, Law, Economics, Information Technology, Engineering and Sports Science.",
+                requirements: "Direct admission based on high aggregate scores in the national matriculation exam.",
+                contact: "Phone: +95 67 432100 | Email: info@nsa.edu.mm"
+            },
+            my: {
+                title: "နေပြည်တော် နိုင်ငံတော်အကယ်ဒမီ",
+                est: "၂၀၂၂",
+                majors: "ဝိဇ္ဇာနှင့်သိပ္ပံဘာသာရပ်များ၊ ဆေးပညာ၊ ဥပဒေပညာ၊ စီးပွားရေးပညာ၊ သတင်းအချက်အလက်နည်းပညာ၊ အင်ဂျင်နီယာနှင့် အားကစားသိပ္ပံ။",
+                requirements: "တက္ကသိုလ်ဝင်တန်း စုစုပေါင်းရမှတ် အဆင့်သတ်မှတ်ချက်အပေါ် မူတည်၍ ရွေးချယ်တက်ရောက်ခွင့်ရှိသည်။",
+                contact: "ဖုန်း: ၀၆၇-၄၃၂၁၀၀ | အီးမေးလ်: info@nsa.edu.mm"
+            }
+        },
+        nspu: {
+            en: {
+                title: "Nay Pyi Taw State Polytechnic University",
+                est: "2024 (Upgraded)",
+                majors: "Civil Engineering, Electronic Engineering, Mechanical Engineering, Computer Science & Technology.",
+                requirements: "High marks in Mathematics, Physics, and Chemistry in matriculation examination.",
+                contact: "Phone: +95 67 345678 | Website: www.nspu.edu.mm"
+            },
+            my: {
+                title: "နေပြည်တော် နိုင်ငံတော် နည်းပညာတက္ကသိုလ်",
+                est: "၂၀၂၄ (အဆင့်မြှင့်တင်ခဲ့)",
+                majors: "မြို့ပြအင်ဂျင်နီယာ၊ လျှပ်စစ်အီလက်ထရွန်နစ်အင်ဂျင်နီယာ၊ စက်မှုအင်ဂျင်နီယာ၊ ကွန်ပျူတာသိပ္ပံနှင့် နည်းပညာ။",
+                requirements: "တက္ကသိုလ်ဝင်တန်းစာမေးပွဲတွင် သင်္ချာ၊ ရူပဗေဒ နှင့် ဓာတုဗေဒ ဘာသာရပ်များ၌ ရမှတ်ကောင်းမွန်ရမည်။",
+                contact: "ဖုန်း: ၀၆၇-၃၄၅၆၇၈ | ဝက်ဘ်ဆိုက်: www.nspu.edu.mm"
+            }
+        }
+    };
+
+    let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+    function renderPage() {
+        // Update Language Toggle buttons
+        document.querySelectorAll('.langToggleBtn').forEach(btn => {
+            btn.textContent = currentLang === 'en' ? 'မြန်မာ' : 'English';
+        });
+
+        // Static texts translation
+        document.getElementById('navBrand').textContent = localization[currentLang].brand;
+        document.getElementById('heroTitle').textContent = localization[currentLang].heroTitle;
+        document.getElementById('heroSubtitle').textContent = localization[currentLang].heroSubtitle;
+        document.getElementById('footerText').textContent = localization[currentLang].footer;
+        
+        document.querySelectorAll('.txt-home').forEach(el => el.textContent = localization[currentLang].home);
+        document.querySelectorAll('.txt-categories').forEach(el => el.textContent = localization[currentLang].categories);
+        document.querySelectorAll('.txt-edu').forEach(el => el.textContent = localization[currentLang].edu);
+        document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = localization[currentLang].scenic);
+        document.querySelectorAll('.txt-markets').forEach(el => el.textContent = localization[currentLang].markets);
+        document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = localization[currentLang].hotels);
+        document.querySelectorAll('.txt-about').forEach(el => el.textContent = localization[currentLang].about);
+        document.querySelectorAll('.txt-trip').forEach(el => el.textContent = localization[currentLang].trip);
+        document.querySelectorAll('.txt-contact').forEach(el => el.textContent = localization[currentLang].contact);
+        
+        document.querySelectorAll('.txt-explore').forEach(el => el.textContent = localization[currentLang].explore);
+        document.querySelector('.filter-btn[data-filter="university"]').textContent = localization[currentLang].btnUni;
+
+        // Update Card Content Dynamic attribute
+        document.querySelectorAll('.edu-item-card').forEach(card => {
+            const titleNode = card.querySelector('.cardTitle');
+            const locNode = card.querySelector('.cardLoc');
+            const descNode = card.querySelector('.cardDesc');
+            const badgeNode = card.querySelector('.cardBadge');
+
+            titleNode.textContent = titleNode.getAttribute(`data-${currentLang}`);
+            locNode.textContent = locNode.getAttribute(`data-${currentLang}`);
+            descNode.textContent = descNode.getAttribute(`data-${currentLang}`);
+            
+            const badgeKey = badgeNode.getAttribute('data-key');
+            badgeNode.textContent = localization[currentLang][badgeKey];
+        });
+    }
+
+    // Modal Details Renderer
+    function openDetails(uniKey) {
+        const data = universityDetails[uniKey][currentLang];
+        const labels = localization[currentLang];
+        
+        document.getElementById('modalTitle').textContent = data.title;
+        
+        const htmlContent = `
+            <div class="mb-3">
+                <span class="info-label"><i class="fa-solid fa-calendar-days me-2"></i>${labels.lblEst}:</span> <span>${data.est}</span>
+            </div>
+            <div class="mb-3">
+                <span class="info-label"><i class="fa-solid fa-graduation-cap me-2"></i>${labels.lblMajors}:</span>
+                <p class="mt-1 text-muted ms-4">${data.majors}</p>
+            </div>
+            <div class="mb-3">
+                <span class="info-label"><i class="fa-solid fa-clipboard-list me-2"></i>${labels.lblReq}:</span>
+                <p class="mt-1 text-muted ms-4">${data.requirements}</p>
+            </div>
+            <div class="mb-2">
+                <span class="info-label"><i class="fa-solid fa-address-book me-2"></i>${labels.lblContact}:</span>
+                <p class="mt-1 text-muted ms-4">${data.contact}</p>
+            </div>
+        `;
+        
+        document.getElementById('modalBody').innerHTML = htmlContent;
+        
+        // Trigger Bootstrap Modal
+        var myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        myModal.show();
+    }
+
+    // Sidebar Drawer Toggle for Mobile
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const slidebar = document.querySelector('.slidebar');
+    const overlay = document.getElementById('overlay');
+
+    if(sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            slidebar.classList.add('active');
+            overlay.classList.add('show');
+        });
+    }
+
+    if(overlay) {
+        overlay.addEventListener('click', () => {
+            slidebar.classList.remove('active');
+            overlay.classList.remove('show');
+        });
+    }
+
+    // Language toggle event listeners
+    document.querySelectorAll('.langToggleBtn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'my' : 'en';
+            localStorage.setItem('globalLanguage', currentLang);
+            renderPage();
+        });
+    });
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'globalLanguage') {
+            currentLang = e.newValue || 'en';
+            renderPage();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderPage();
+    });
+</script>
+</body>
+</html>

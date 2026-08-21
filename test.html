@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Planning - Naypyitaw Directory</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    background: url('https://www.shutterstock.com/image-illustration/myanmar-government-building-nay-pyi-260nw-1992915101.jpg') no-repeat center center/cover fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(8px);
+    background-color: rgba(17, 75, 95, 0.7);
+    z-index: -1;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important;
+    white-space: nowrap;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F;
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+.search-box {
+    margin-top: 15px;
+}
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+    margin-top: 0;
+}
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+    margin-top: 0;
+}
+
+.content-area {
+    flex: 1;
+    margin-left: 230px;
+    padding: 40px;
+}
+
+.map-container {
+    background-color: #ffffff;
+    border: 1px solid #eef2f5;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.zone-btn {
+    width: 100%;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    text-align: left;
+    border: 1px solid rgba(17, 75, 95, 0.1);
+    background-color: #f8f9fa;
+    color: #114B5F;
+    padding: 12px 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.zone-btn:hover, .zone-btn.active {
+    background-color: #114B5F;
+    color: #ffffff;
+    border-color: #114B5F;
+}
+
+.crystal-shape {
+    fill: #f1f3f5;
+    stroke: #114B5F;
+    stroke-width: 2;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.crystal-shape:hover, .crystal-shape.active {
+    fill: #114B5F;
+    stroke: #E4B34F;
+}
+.map-text {
+    fill: #114B5F;
+    font-size: 13px;
+    font-weight: bold;
+    pointer-events: none;
+    transition: fill 0.3s ease;
+}
+.crystal-shape.active + .map-text, .crystal-shape:hover + .map-text {
+    fill: #E4B34F;
+}
+
+.overview-box {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    padding: 25px;
+    border: 1px solid #eef2f5;
+}
+
+.timeline-wrapper {
+    border-left: 3px solid #114B5F;
+    padding-left: 25px;
+    margin-left: 10px;
+}
+.timeline-node {
+    position: relative;
+    margin-bottom: 25px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #eef2f5;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+}
+.timeline-node::before {
+    content: "";
+    position: absolute;
+    left: -32px;
+    top: 24px;
+    width: 11px;
+    height: 11px;
+    background-color: #E4B34F;
+    border: 2px solid #114B5F;
+    border-radius: 50%;
+}
+
+.timeline-node-title {
+    font-weight: 700;
+    color: #114B5F;
+    margin-top: 4px;
+    font-size: 18px;
+}
+.timeline-node-desc {
+    color: #6c757d;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Action Explore Link Button Styling */
+.action-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: #114B5F;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+.action-link:hover {
+    color: #E4B34F;
+}
+
+/* Modal Styling */
+.modal-header {
+    background-color: #114B5F;
+    color: white;
+}
+.modal-header .btn-close {
+    filter: invert(1) grayscale(1) brightness(2);
+}
+.info-label {
+    font-weight: 600;
+    color: #114B5F;
+}
+.modal-place-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: relative;
+    width: 100%;
+    z-index: 2600;
+    margin-top: auto;
+}
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+#sidebarToggle {
+    display: none;
+}
+
+@media(max-width: 992px) {
+    .content-area {
+        padding-left: 20px;
+    }
+}
+
+@media(max-width: 768px) {
+    #sidebarToggle {
+        display: block;
+    }
+    .slidebar {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+    .slidebar.active {
+        transform: translateX(0);
+    }
+    .navbar-collapse {
+        display: none !important;
+    }
+    .content-area {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+
+<!-- Header Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-about active txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Sidebar -->
+<div class="main-wrapper">
+    <ul class="slidebar">
+        <div class="search-box">
+            <div class="input-group">
+                <span class="input-group-text bg-primary text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="10" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </span>
+                <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." />
+            </div>
+        </div>
+        <li><a class="txt-home" href="home.html">Home</a></li>
+        <li class="nav-item dropdown">
+            <div class="btn-group w-100">
+                <a class="nav-link txt-categories text-white py-2" href="categories.html">Categories</a>
+                <a class="nav-link dropdown-toggle dropdown-toggle-split text-white py-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                    <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                    <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                    <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a class="actived txt-trip" href="trip planning.html">Trip planning</a></li>
+        <li><a class="txt-about" href="about.html">About</a></li>
+        <li><a class="txt-contact" href="contact.html">Contact</a></li>
+        <li class="mt-4">
+            <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+        </li>
+    </ul>
+
+    <!-- Main Workspace -->
+    <main class="content-area">
+        <div class="container-fluid">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h1 id="tripTitle" class="fw-bold" style="color: #E4B34F;margin-top: 100px;">Naypyitaw 4-Districts Route Planner</h1>
+                    <p id="tripSub" class="text-muted fs-5" style="color: #E4B34F;">Explore destinations sequentially by choosing specific districts.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-xl-5">
+                    <div class="map-container mb-4">
+                        <h5 id="insightsTitle" class="fw-bold mb-1" style="color: #114B5F;">Zone Insights</h5>
+                        <p id="insightsDesc" class="text-muted small mb-4">Click the interactive crystal zones directly to preview seamless routes.</p>
+                        
+                        <svg viewBox="0 0 400 400" class="w-100 mb-4" style="max-height: 280px;">
+                            <polygon id="shapeOttara" points="70,40 190,30 200,160 50,150" class="crystal-shape" onclick="switchDistrict('ottara')" />
+                            <text x="110" y="100" class="map-text">Ottara</text>
+                            
+                            <polygon id="shapeZeyarthiri" points="190,30 330,50 340,170 200,160" class="crystal-shape" onclick="switchDistrict('zeyarthiri')" />
+                            <text x="235" y="100" class="map-text">Zeyarthiri</text>
+                            
+                            <polygon id="shapeDekkhina" points="50,150 200,160 190,320 60,290" class="crystal-shape" onclick="switchDistrict('dekkhina')" />
+                            <text x="100" y="240" class="map-text">Dekkhina</text>
+                            
+                            <polygon id="shapePyinmana" points="200,160 340,170 320,330 190,320" class="crystal-shape" onclick="switchDistrict('pyinmana')" />
+                            <text x="240" y="240" class="map-text">Pyinmana</text>
+                        </svg>
+
+                        <div class="d-flex flex-column gap-2">
+                            <button class="zone-btn" id="btnOttara" onclick="switchDistrict('ottara')"><i class="fa-solid fa-map-location-dot me-2"></i> Ottara District</button>
+                            <button class="zone-btn" id="btnZeyarthiri" onclick="switchDistrict('zeyarthiri')"><i class="fa-solid fa-map-location-dot me-2"></i> Zeyarthiri District</button>
+                            <button class="zone-btn" id="btnDekkhina" onclick="switchDistrict('dekkhina')"><i class="fa-solid fa-map-location-dot me-2"></i> Dekkhina District</button>
+                            <button class="zone-btn" id="btnPyinmana" onclick="switchDistrict('pyinmana')"><i class="fa-solid fa-map-location-dot me-2"></i> Pyinmana District</button>
+                        </div>
+                    </div>
+
+                    <div class="overview-box">
+                        <h4 id="panelTitle" class="fw-bold mb-2" style="color: #114B5F;">District Overview</h4>
+                        <p id="panelDesc" class="text-muted small mb-0">Select a section map or choose from buttons above to render the localized route profile itinerary.</p>
+                    </div>
+                </div>
+
+                <div class="col-xl-7">
+                    <h3 id="timelineHeading" class="fw-bold mb-4" style="color: #E4B34F;">Optimized Proximity Route</h3>
+                    <div class="timeline-wrapper" id="timelineContent">
+                        <!-- Dynamic Node Insertion -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Large Modal with Right Image -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalTitle">Location Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4" id="modalBody">
+        <!-- Dynamic Content (Left side Info, Right side Image) Injected Here -->
+      </div>
+      <div class="modal-footer">
+        <a id="modalDetailBtn" href="#" class="btn btn-warning text-dark fw-bold px-4">Check Detail <i class="fa-solid fa-chevron-right ms-1"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="footerText">
+    <p>© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Database for Detailed Place Information, Image and Page Links
+const placeDetailsData = {
+    safari: {
+        en: {
+            title: "Naypyitaw Safari Park",
+            type: "Wildlife Park & Attraction",
+            location: "Zeyarthiri District, Naypyitaw",
+            desc: "An open-concept wildlife reserve featuring Asian, Australian, and African zones. Visitors can take guided buggy tours to see rare species, lions, tigers, giraffes, and rhinos roaming in natural habitat style enclosures.",
+            img: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Safari_Park_Naypyitaw_001.jpg",
+            pageUrl: "Nay Pyi Taw Safari Park.html"
+        },
+        my: {
+            title: "နေပြည်တော် ဆာဖာရီဥယျာဉ်",
+            type: "တောရိုင်းတိရစ္ဆာန် ဥယျာဉ်",
+            location: "ဇေယျာသီရိခရိုင်၊ နေပြည်တော်",
+            desc: "အာရှ၊ ဩစတြေးလျနှင့် အာဖရိက ဇုန်းများခွဲခြားကာ တောရိုင်းတိရစ္ဆာန်များကို သဘာဝအတိုင်း လွှတ်ကျောင်းမွေးမြူထားသော ဥယျာဉ်ကြီး ဖြစ်သည်။ ဘက်ဂီကားများဖြင့် လှည့်လည်ကြည့်ရှုနိုင်ပြီး ရှားပါးတိရစ္ဆာန်များ၊ ခြင်္သေ့၊ ကျား၊ သစ်ကုလားအုတ်နှင့် ကြံ့များကို လေ့လာနိုင်သည်။",
+            img: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Safari_Park_Naypyitaw_001.jpg",
+            pageUrl: "Nay Pyi Taw Safari Park.html"
+        }
+    },
+    zoo: {
+        en: {
+            title: "Naypyitaw Zoological Gardens",
+            type: "Zoological Park & Attraction",
+            location: "Zeyarthiri District, Naypyitaw",
+            desc: "The  zoo in Myanmar with an impressive penguin house and dynamic wildlife habitats.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQipA3J-qBKfxDIcSlpruEZREIaqrNwDmnYtTXpgTLw8ue9bci27Uq29A&s=10",
+            pageUrl: "Naypyidaw Zoological Gardens.html"
+        },
+        my: {
+            title: "နေပြည်တော် တိရစ္ဆာန်ဥယျာဉ်",
+            type: "တိရစ္ဆာန်ဥယျာဉ်နှင့် အပန်းဖြေစခန်း",
+            location: "ဇေယျာသီရိခရိုင်၊ နေပြည်တော်",
+            desc: "ပင်ဂွင်းအိမ်အပါအဝင် ကမ္ဘာ့အဆင့်မီ ဆန်းပြားသော သတ္တဝါမျိုးစုံကို ပြသထားသည့် မြန်မာနိုင်ငံ၏တိရစ္ဆာန်ရုံ။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQipA3J-qBKfxDIcSlpruEZREIaqrNwDmnYtTXpgTLw8ue9bci27Uq29A&s=10",
+            pageUrl: "Naypyidaw Zoological Gardens.html"
+        }
+    },
+    uppatasanti: {
+        en: {
+            title: "Uppatasanti Pagoda",
+            type: "Famous Pagoda / Landmark",
+            location: "Pobba Thiri Township, Naypyitaw",
+            desc: "The iconic replica of Shwedagon Pagoda, anchoring the primary spiritual vista of Nay Pyi Taw. Inside, you can see carved jade relief panels depicting scenes from Buddha's life.",
+            img: "https://upload.wikimedia.org/wikipedia/en/9/99/Naypyidaw_--_Uppatasanti_Pagoda.JPG",
+            pageUrl: "Uppsanti.html"
+        },
+        my: {
+            title: "ဥပ္ပါတသန္တိ စေတီတော်ကြီး",
+            type: "ထင်ရှားသော စေတီတော် / အထိမ်းအမှတ်",
+            location: "ပုဗ္ဗသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "ရန်ကုန်မြို့ရှိ ရွှေတိဂုံစေတီတော်ကို နမူနာယူ တည်ဆောက်ထားသော နေပြည်တော်၏ အထင်ကရ စေတီတော်ကြီး ဖြစ်ပါသည်။ စေတီတော်လိုဏ်ဂူအတွင်း ဗုဒ္ဓဝင်ကျောက်ဆစ်ရုပ်ပွားတော်များနှင့် ပန်းပုလက်ရာများကို ဖူးမြော်နိုင်သည်။",
+            img: "https://upload.wikimedia.org/wikipedia/en/9/99/Naypyidaw_--_Uppatasanti_Pagoda.JPG",
+            pageUrl: "Uppsanti.html"
+        }
+    },
+    landmark_garden: {
+        en: {
+            title: "National Landmark Garden",
+            type: "Cultural Park & Attraction",
+            location: "Zeyarthiri District, Naypyitaw",
+            desc: "National Landmark Garden in Naypyitaw is a vast cultural park showcasing miniature replicas of Myanmar’s most famous landmarks, pagodas, and heritage sites. Visitors can explore the country’s architectural wonders in one place, enjoy landscaped gardens, and learn about Myanmar’s rich traditions.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWl04p_jtkpROp7XxB6KTbDLtlUnRPoOW6ydEAQLqtbC_JjkN1Jh_K2nx3KpNpgbjEo3Xw8O2G1Icay96DF0oy7iyNjEGdcpTJg2YnAdG3iQ0Mxf58o1ya9viex_4R41fDzRETaLsQ=s680-w680-h510-rw",
+            pageUrl: "National Landmark Garden.html"
+        },
+        my: {
+            title: "အမျိုးသားအထိမ်းအမှတ်ဥယျာဉ်",
+            type: "ယဉ်ကျေးမှုပန်းခြံနှင့် လည်ပတ်စရာနေရာ",
+            location: "ဇေယျာသီရိခရိုင်၊ နေပြည်တော်",
+            desc: "မြန်မာနိုင်ငံတစ်ဝန်းရှိ ထင်ရှားကျော်ကြားသော တိုင်းနှင့်ပြည်နယ်အသီးသီး၏ စေတီပုထိုးများ၊ အထင်ကရအဆောက်အအုံများနှင့် သမိုင်းဝင်နေရာများကို ပုံစံတူငယ်များ ပြုလုပ်၍ စုစည်းပြသထားသော အပန်းဖြေယဉ်ကျေးမှုပန်းခြံကြီး ဖြစ်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWl04p_jtkpROp7XxB6KTbDLtlUnRPoOW6ydEAQLqtbC_JjkN1Jh_K2nx3KpNpgbjEo3Xw8O2G1Icay96DF0oy7iyNjEGdcpTJg2YnAdG3iQ0Mxf58o1ya9viex_4R41fDzRETaLsQ=s680-w680-h510-rw",
+            pageUrl: "National Landmark Garden.html"
+        }
+    },
+    defence_museum: {
+        en: {
+            title: "Defence Services Museum",
+            type: "Historical & Military Museum",
+            location: "Zeyarthiri District, Naypyitaw",
+            desc: "A sprawling exhibition complex dedicated to the history, technology, and service branches of the Myanmar Armed Forces, featuring large-scale military hardware, aircraft, and historical artifacts.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkxhPjDO5XwqES_djzvewFMnKnkCVIuyER342jpeeUBlncAUPYID4HijU&s=1024",
+            pageUrl: "defence service.html"
+        },
+        my: {
+            title: "တပ်မတော်စစ်သမိုင်းပြတိုက်",
+            type: "သမိုင်းနှင့် စစ်ဘက်ဆိုင်ရာပြတိုက်",
+            location: "ဇေယျာသီရိခရိုင်၊ နေပြည်တော်",
+            desc: "မြန်မာ့တပ်မတော်၏ သမိုင်းဝင် မှတ်တမ်းများ၊ တပ်မတော် (ကြည်း၊ ရေ၊ လေ) တို့၏ လက်နက်ကိရိယာများ၊ စစ်လေယာဉ်များကို အဆင့်မြင့်ခမ်းနားစွာ ခင်းကျင်းပြသထားသော ပြတိုက်ကြီး ဖြစ်ပါသည်။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkxhPjDO5XwqES_djzvewFMnKnkCVIuyER342jpeeUBlncAUPYID4HijU&s=1024",
+            pageUrl: "defence service.html"
+        }
+    },
+    fallen_heroes: {
+        en: {
+            title: "Memorial to the Fallen Heroes",
+            type: "Historical & National Memorial",
+            location: "Zeyarthiri Township, Naypyitaw",
+            desc: "The Memorial to the Fallen Heroes is a prominent national monument built on a 38.5-acre hilltop in Zeyarthiri Township. Constructed with white alabaster marble and traditional art carvings, it honors soldiers and civilians who sacrificed for the country. The site features a central pavilion surrounded by a scenic lake and quiet grounds.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlnpqscxKx11DbzJ4900x5hJvfkPTUj1Pk6s-6-pFCvagc8Q_7e25A04_Qo50mc7E4Z8bPwDiDdcJxjYYE6s0azyPtClBHxMXrVgl1TiENyOGRjNQkfSUdUkeEXhI1XumA_h_rPig=s1360-w1360-h1020-rw", // Replace with image URL if available
+            pageUrl: "memorise to fallen.html"
+        },
+        my: {
+            title: "သူရဲကောင်းဗိမာန် (နေပြည်တော်)",
+            type: "သမိုင်းဝင် နိုင်ငံတော်အထိမ်းအမှတ် ဗိမာန်",
+            location: "ဇေယျာသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "ဇေယျာသီရိမြို့နယ်ရှိ တောင်ကုန်းမြင့်ပေါ်တွင် တည်ဆောက်ထားသော နိုင်ငံတော်အဆင့် အထိမ်းအမှတ်ဗိမာန် ဖြစ်ပါသည်။ နိုင်ငံတော်နှင့် လွတ်လပ်ရေးအတွက် သက်စွန့်ကြိုးပမ်းခဲ့ကြသော စစ်သည်တော်များနှင့် ပြည်သူများ၏ အမည်နာမများကို စကျင်ကျောက်ထက်တွင် ကမ္ပည်းရေးထွင်း၍ ဂုဏ်ပြုထားရှိသော ငြိမ်သက်အေးချမ်းသည့် သမိုင်းဝင်နေရာတစ်ခု ဖြစ်သည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlnpqscxKx11DbzJ4900x5hJvfkPTUj1Pk6s-6-pFCvagc8Q_7e25A04_Qo50mc7E4Z8bPwDiDdcJxjYYE6s0azyPtClBHxMXrVgl1TiENyOGRjNQkfSUdUkeEXhI1XumA_h_rPig=s1360-w1360-h1020-rw", // Replace with image URL if available
+            pageUrl: "memorise to fallen.html"
+        }
+    },
+    yezin_agri: {
+        en: {
+            title: "Yezin Agricultural University University",
+            type: "Higher Educational Institute",
+            location: "Yezin, Naypyitaw",
+            desc: "The premier agricultural university in Myanmar, offering a lush green campus dedicated to advanced farming sciences, research fields, and agricultural innovation.",
+            img: "https://pbs.twimg.com/profile_images/1265872419832684546/fBWv2wqb_400x400.jpg",
+            pageUrl: "test3.html"
+        },
+        my: {
+            title: "ရေဆင်းစိုက်ပျိုးရေးတက္ကသိုလ်",
+            type: "အဆင့်မြင့်ပညာရေး တက္ကသိုလ်",
+            location: "ရေဆင်း၊ နေပြည်တော်",
+            desc: "မြန်မာနိုင်ငံ၏ စိုက်ပျိုးရေးကဏ္ဍတိုးတက်ရေးအတွက် အဆင့်မြင့် စိုက်ပျိုးရေးသိပ္ပံ ဘာသာရပ်များနှင့် သုတေသနလုပ်ငန်းများကို အထူးပြုသင်ကြားပေးနေသည့် စိမ်းလန်းစိုပြည်သော သမိုင်းဝင် တက္ကသိုလ် ဖြစ်ပါသည်။",
+            img: "https://pbs.twimg.com/profile_images/1265872419832684546/fBWv2wqb_400x400.jpg",
+            pageUrl: "test3.html"
+        }
+    },
+    yezin_vet: {
+        en: {
+            title: "University of Veterinary Science",
+            type: "Higher Educational Institute",
+            location: "Yezin, Naypyitaw",
+            desc: "The leading specialized veterinary academy in Myanmar, surrounded by research model farms, livestock production facilities, and animal health centers.",
+            img: "https://vetmedicine.uvs.edu.mm/wp-content/uploads/sites/6/2022/08/logo-250x250-1.png",
+            pageUrl: "test9.html"
+        },
+        my: {
+            title: "မွေးမြူရေးဆိုင်ရာဆေးတက္ကသိုလ် (ရေဆင်း)",
+            type: "အဆင့်မြင့်ပညာရေး တက္ကသိုလ်",
+            location: "ရေဆင်း၊ နေပြည်တော်",
+            desc: "တိရစ္ဆာန်ဆေးကုသရေးနှင့် မွေးမြူရေးဆိုင်ရာ ပညာရပ်များကို အထူးပြုသင်ကြားပေးနေသော မြန်မာနိုင်ငံ၏ တစ်ခုတည်းသော အထူးပြု ဆေးတက္ကသိုလ်ကြီး ဖြစ်ပါသည်။",
+            img: "https://vetmedicine.uvs.edu.mm/wp-content/uploads/sites/6/2022/08/logo-250x250-1.png",
+            pageUrl: "test9.html"
+        }
+    },
+    yezin_forest: {
+        en: {
+            title: "University of Forestry and Environmental Science",
+            type: "Higher Educational Institute",
+            location: "Yezin, Naypyitaw",
+            desc: "The premier university in Myanmar offering specialized degrees in forestry management, environmental conservation, and biodiversity research.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSNYuSio-L0DvKOfoUl8u22bWH4wNWAmnQDL99UVGP4A&s=10",
+            pageUrl: "test8.html"
+        },
+        my: {
+            title: "ရေဆင်းသစ်တောနှင့်ပတ်ဝန်းကျင်ဆိုင်ရာတက္ကသိုလ်",
+            type: "အဆင့်မြင့်ပညာရေး တက္ကသိုလ်",
+            location: "ရေဆင်း၊ နေပြည်တော်",
+            desc: "သစ်တောသယံဇာတ ထိန်းသိမ်းရေး၊ သဘာဝပတ်ဝန်းကျင်နှင့် ဇီဝမျိုးစုံမျိုးကွဲဆိုင်ရာ ဘာသာရပ်များကို လေ့ကျင့်သင်ကြားပေးလျက်ရှိသော တက္ကသိုလ် ဖြစ်ပါသည်။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSNYuSio-L0DvKOfoUl8u22bWH4wNWAmnQDL99UVGP4A&s=10",
+            pageUrl: "test8.html"
+        }
+    },
+    white_elephant: {
+        en: {
+            title: "White Elephant House",
+            type: "Cultural & Royal Pavilion",
+            location: "Uppatasanti Pagoda Grounds, Naypyitaw",
+            desc: "Located at the foot of Uppatasanti Pagoda, the Royal White Elephant Pavilion houses revered albino elephants—symbols of peace, royal prosperity, and good fortune in Myanmar tradition. Visitors can observe these rare elephants in a spacious pavilion.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmAb0e_2ZZedTiIQK5XXbH9CPbX7cZ3xJ6iuFpe5nLb41X2T_99mohSYOj3pi5qaCJvRVF-MswaRZi0OHGS--ag8k-Re5NIGJUGnR8t285QY230g_SuP5SbubCsh7MGCE5-940=s1360-w1360-h1020-rw",
+        },
+        my: {
+            title: "ရတနာဆင်ဖြူတော်ဝင်း",
+            type: "ယဉ်ကျေးမှုနှင့် ရိုးရာအထိမ်းအမှတ်ဝင်း",
+            location: "ဥပ္ပါတသန္တိစေတီတော် ရင်ပြင်အနီး၊ နေပြည်တော်",
+            desc: "ဥပ္ပါတသန္တိ စေတီတော်ကြီး၏ ရင်ပြင်တော်အနီးတွင် တည်ရှိပြီး မြန်မာ့ရိုးရာ အယူအဆအရ တိုင်းပြည်အေးချမ်းသာယာပြီး လာဘ်လာဘ တိုးပွားစေသည်ဟု ယူဆကြသော မင်္ဂလာရတနာ ဆင်ဖြူတော်များကို ထိန်းသိမ်းစောင့်ရှောက် ခင်းကျင်းပြသထားသည့် ရတနာဆင်ဖြူတော်ဆောင် ဖြစ်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmAb0e_2ZZedTiIQK5XXbH9CPbX7cZ3xJ6iuFpe5nLb41X2T_99mohSYOj3pi5qaCJvRVF-MswaRZi0OHGS--ag8k-Re5NIGJUGnR8t285QY230g_SuP5SbubCsh7MGCE5-940=s1360-w1360-h1020-rw",
+        }
+    },
+    pobbathiri_market: {
+        en: {
+            title: "Pobba Thiri Market",
+            type: "Public Market & Shopping Hub",
+            location: "Pobba Thiri Township, Naypyitaw",
+            desc: "Pobba Thiri Market is a major commercial hub serving local residents and visitors. It offers a vibrant daily shopping experience with a wide variety of fresh farm produce, regional delicacies, household goods, and traditional crafts.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWk0JkoNOFUFeA5XR9Bm31BRZjpHkYqiiMy7IFPCTXyuHQtFR9e8EUKBrBQt-T-bN_Z8hFkG_zGlazYqqRilUeFL9ZziZMnIKONuJQk5feskGjsN2LIaDIRsfusr7OrFbDUPlg1N2g=s1360-w1360-h1020-rw",
+            pageUrl: "Pobbathiri-market.html"
+        },
+        my: {
+            title: "ပုဗ္ဗသီရိဈေးကြီး",
+            type: "အများပြည်သူသုံး ဈေးနှင့် ကုန်သွယ်ရေးဗဟို",
+            location: "ပုဗ္ဗသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "ပုဗ္ဗသီရိဈေးကြီးသည် ပုဗ္ဗသီရိမြို့နယ်ရှိ အဓိက ကုန်သွယ်ရေးဗဟိုချက် ဖြစ်ပါသည်။ လတ်ဆတ်သော လယ်ယာထွက်ကုန် သီးနှံများ၊ ဒေသထွက် အစားအစာများ၊ အိမ်သုံးပစ္စည်းများနှင့် လက်ရာပစ္စည်းများကို စုံလင်စွာ ဝယ်ယူရရှိနိုင်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWk0JkoNOFUFeA5XR9Bm31BRZjpHkYqiiMy7IFPCTXyuHQtFR9e8EUKBrBQt-T-bN_Z8hFkG_zGlazYqqRilUeFL9ZziZMnIKONuJQk5feskGjsN2LIaDIRsfusr7OrFbDUPlg1N2g=s1360-w1360-h1020-rw",
+            pageUrl: "Pobbathiri-market.html"
+        }
+    },
+    ywadaw_market: {
+        en: {
+            title: "Mingalar Market (Ywadaw)",
+            type: "Local Food & Community Market",
+            location: "Ywadaw Area, Pobba Thiri Township, Naypyitaw",
+            desc: "Located in the Ywadaw region of Pobba Thiri Township, Mingalar Market provides fresh daily groceries, farm produce, traditional snacks, and local household essentials to neighboring residents.",
+            img: "https://lh3.googleusercontent.com/grass-cs/ACvplmOiBklofaJ9FZd2Ri3j2I0fPOm02Bq9PQtAekK2Rw57f3FP7rx8WYSfYCVKslaS5sR-Zcj4PU35GDBNHTzcU8itduCwB5wF4dn-DKkKFMIljCk5kuOjTGerTWqCnT5jkAnroYCYNA=s1360-w1360-h1020-rw",
+            pageUrl: "ywadaw.html"
+        },
+        my: {
+            title: "မင်္ဂလာဈေး (ရွာတော်)",
+            type: "ဒေသခံဈေး",
+            location: "ရွာတော်၊ ပုဗ္ဗသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "ပုဗ္ဗသီရိမြို့နယ် ရွာတော်နယ်မြေအတွင်း တည်ရှိပြီး ဒေသခံများအတွက် နေ့စဉ် လတ်ဆတ်သော အသား၊ ငါး၊ ဟင်းသီးဟင်းရွက်များ၊ ရိုးရာ မုန့်ပဲသရေစာများနှင့် နေ့စဉ် သုံးကုန်များကို လွယ်ကူစွာ ဝယ်ယူနိုင်သည့် ဈေးကြီး ဖြစ်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/grass-cs/ACvplmOiBklofaJ9FZd2Ri3j2I0fPOm02Bq9PQtAekK2Rw57f3FP7rx8WYSfYCVKslaS5sR-Zcj4PU35GDBNHTzcU8itduCwB5wF4dn-DKkKFMIljCk5kuOjTGerTWqCnT5jkAnroYCYNA=s1360-w1360-h1020-rw",
+            pageUrl: "ywadaw.html"
+        }
+    },
+    polytechnic_univ: {
+        en: {
+            title: "Naypyitaw State Polytechnic University",
+            type: "Educational Institution",
+            location: "Ottarathiri Township, Naypyitaw",
+            desc: "Naypyitaw State Polytechnic University is a premier technical higher education institution designed to foster innovation, engineering excellence, and practical technological skills for students across Myanmar.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9x_rKxixRtMMRUpyqj5JLg2olp0eQVBkQpUT2pW1dWl4E56hO01s_AFw&s=10",
+            pageUrl: "test5.html"
+        },
+        my: {
+            title: "နေပြည်တော် နည်းပညာတက္ကသိုလ်",
+            type: "အဆင့်မြင့် ပညာရေး တက္ကသိုလ်",
+            location: "ဥတ္တရသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "နေပြည်တော် နည်းပညာတက္ကသိုလ်သည် အင်ဂျင်နီယာနှင့် နည်းပညာဘာသာရပ်များကို အထူးပြု သင်ကြားပေးပြီး တန်းဖိုးရှိသော နည်းပညာကျွမ်းကျင်သူများကို မွေးထုတ်ပေးလျက်ရှိသည့် အဆင့်မြင့် တက္ကသိုလ် ဖြစ်ပါသည်။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9x_rKxixRtMMRUpyqj5JLg2olp0eQVBkQpUT2pW1dWl4E56hO01s_AFw&s=10",
+            pageUrl: "test5.html"
+        }
+    },
+
+    ocean_supercenter: {
+        en: {
+            title: "Ocean Supercenter (Ottarathiri)",
+            type: "Shopping Mall",
+            location: "Ottarathiri Township, Naypyitaw",
+            desc: "A major commercial shopping hub in Ottarathiri offering a comprehensive range of local and imported groceries, fashion apparel, electronics, and multiple dining options under one roof.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_J7t6z4JwkCR0qcJTkXn2TEYJiXn1n4vlP0hbqFe4IbLMMBehhpklYD6I&s=10",
+            pageUrl: "ocean supermarket.html"
+        },
+        my: {
+            title: "အိုရှန်း စူပါစင်တာ (ဥတ္တရသီရိ)",
+            type: " ဈေးဝယ်စင်တာ",
+            location: "ဥတ္တရသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "ဥတ္တရသီရိမြို့နယ်၏ အဓိက ဈေးဝယ်စင်တာ ဖြစ်ပြီး နေ့စဉ်သုံး ကုန်ပစ္စည်းများ၊ အဝတ်အထည်၊ လျှပ်စစ်ပစ္စည်းများနှင့် အစားအသောက်ဆိုင်များကို စုံလင်စွာ ဝယ်ယူရရှိနိုင်သည့် အဓိက နေရာဖြစ်ပါသည်။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_J7t6z4JwkCR0qcJTkXn2TEYJiXn1n4vlP0hbqFe4IbLMMBehhpklYD6I&s=10",
+            pageUrl: "ocean supermarket.html"
+        }
+    },
+
+    hlay_khwe_taung: {
+        en: {
+            title: "Hlay Khwe Taung Pagoda",
+            type: "Religious & Natural Landmark",
+            location: "Tatkon Township, Naypyitaw",
+            desc: "Situated atop a serene hill, Hlay Khwe Taung Pagoda is a peaceful pilgrimage site offering panoramic views of the surrounding natural landscape and countryside.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnNWFmUgi5gmGNkUwSkkvB3kHVqbkfSjV6c74Xv48Vu-j3KNDNpIezyAZoSVy0pcZOTgt34TCySAnfb0PJCELyb-hS0-D7Qtgpl30K6X4d_7OPhJ0nws1IfsSi2Hcfrkuxcu992wALXcFc9=s1360-w1360-h1020-rw",
+            pageUrl: "Hlay Khwe Taung.html"
+        },
+        my: {
+            title: "လှေခွင်းတောင် စေတီတော်",
+            type: "သာသနိကနှင့် သဘာဝအပန်းဖြေနေရာ",
+            location: "တပ်ကုန်းမြို့နယ်၊ နေပြည်တော်",
+            desc: "တောင်ထိပ်ပေါ်တွင် တည်ထားကိုးကွယ်ထားသည့် လှေခွက်တောင် စေတီတော်သည် စိတ်အေးချမ်းဖွယ်ကောင်းသော သာသနိကနယ်မြေတစ်ခု ဖြစ်ပြီး ပတ်ဝန်းကျင် သဘာဝရှုခင်းများကို အထက်စီးမှ ကြည့်ရှုနိုင်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnNWFmUgi5gmGNkUwSkkvB3kHVqbkfSjV6c74Xv48Vu-j3KNDNpIezyAZoSVy0pcZOTgt34TCySAnfb0PJCELyb-hS0-D7Qtgpl30K6X4d_7OPhJ0nws1IfsSi2Hcfrkuxcu992wALXcFc9=s1360-w1360-h1020-rw",
+            pageUrl: "Hlay Khwe Taung.html"
+        }
+    },
+
+    maha_bawdi: {
+        en: {
+            title: "Buddhagaya Thatta Thattaha Maha Bawdi Pagoda",
+            type: "Religious Landmark & Sacred Pagoda",
+            location: "Ottarathiri Township, Naypyitaw",
+            desc: "A magnificent 162-foot-tall replica of the famous Mahabodhi Temple in Bodh Gaya, India. It stands as a prominent Buddhist pilgrimage destination in Naypyitaw.",
+            img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/12/11/4d/3a/img-20180216-124532-393.jpg?w=1100&h=-1&s=1",
+            pageUrl: "Buddhagya.html"
+        },
+        my: {
+            title: "ဗုဒ္ဓဂယာ သတ္တသတ္တာဟ မဟာဗောဓိစေတီတော်မြတ်ကြီး",
+            type: "ထင်ရှားသော သာသနိက စေတီတော်ကြီး",
+            location: "ဥတ္တရသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: "အိန္ဒိယနိုင်ငံ ဗုဒ္ဓဂယာရှိ မဟာဗောဓိ စေတီတော်မြတ်ကြီး၏ ပုံစံအတိုင်း ပုံတူတည်ထားပူဇော်ထားသော သာသနိက စေတီတော်ကြီး ဖြစ်ပါသည်။",
+            img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/12/11/4d/3a/img-20180216-124532-393.jpg?w=1100&h=-1&s=1",
+            pageUrl: "Buddhagya.html"
+        }
+    },
+
+    pinlong_hot_spring: {
+        en: {
+            title: "Pinlong Hot Spring Resort",
+            type: "Eco-Resort & Thermal Baths",
+            location: "Tatkon Township, Naypyitaw",
+            desc: "A relaxing getaway featuring natural mineral-rich hot springs nestled amidst lush greenery, offering visitors a therapeutic natural bath experience and scenic views.",
+            img: "npt photos/unnamed.webp",
+            pageUrl: "Hot Spring Resort.html"
+        },
+        my: {
+            title: "ပင်လုံ ရေပူစမ်း အပန်းဖြေစခန်း",
+            type: "သဘာဝအပန်းဖြေစခန်းနှင့် ရေပူစမ်း",
+            location: "တပ်ကုန်းမြို့နယ်၊ နေပြည်တော်",
+            desc: "စိမ်းလန်းစိုပြည်သော သဘာဝပတ်ဝန်းကျင်အလယ်တွင် တည်ရှိပြီး သဘာဝ ရေပူစမ်းများတွင် စိမ်ရင်း ကိုယ်စိမ့်စိတ်ကြည် လန်းဆန်းစေသည့် သဘာဝအပန်းဖြေနေရာ ဖြစ်ပါသည်။",
+            img: "npt photos/unnamed.webp",
+            pageUrl: "Hot Spring Resort.html"
+        }
+    },
+
+    sakkyaramsi_buddha: {
+        en: {
+            title: "Maha Sakkyaramsi Standing Buddha Image",
+            type: "Religious Landmark & Sacred Marble Image",
+            location: "Ottarathiri Township, Naypyitaw",
+            desc: "A  standing Buddha statue carved meticulously out of solid marble, representing serene religious craftsmanship and spiritual peace in Ottarathiri.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmGb6dy1vdO7Gxo-6wIrxlBWwOPiIjF-t2_Q81n4Cw7aMnrvubsCi6j4G8aMX7qyz0gGROJ86IqAQrMKDcQvrB6_Ct-D1utHbKmhugt0yh-a2laePLiJbOztDxJM2JS6es1elqf8ScuzIe5=s1360-w1360-h1020-rw",
+            pageUrl: "Maha Sakkyaramsi.html"
+        },
+        my: {
+            title: "မဟာသကျရံသီ ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး",
+            type: "ကျောက်ဆစ် ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး",
+            location: "ဥတ္တရသီရိမြို့နယ်၊ နေပြည်တော်",
+            desc: " သပ္ပါယ်လှသော စလင်းကျောက်ဆစ် မဟာသကျရံသီ ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး ဖြစ်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmGb6dy1vdO7Gxo-6wIrxlBWwOPiIjF-t2_Q81n4Cw7aMnrvubsCi6j4G8aMX7qyz0gGROJ86IqAQrMKDcQvrB6_Ct-D1utHbKmhugt0yh-a2laePLiJbOztDxJM2JS6es1elqf8ScuzIe5=s1360-w1360-h1020-rw",
+            pageUrl: "Maha Sakkyaramsi.html"
+        }
+    },
+    nsa_univ: {
+        en: {
+            title: "Naypyitaw State Academy (NSA)",
+            type: "Higher Educational Institute",
+            location: "Pyinmana District, Naypyitaw",
+            desc: "Naypyitaw State Academy is a premier higher education university in Naypyitaw designed to offer diverse undergraduate and postgraduate degree programs in arts, science, law, economics, and technology.",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThdyrZkL4r__eOEM6kF0xNZkfmUgGVXQ0ulKFqblslsQ&s=10",
+            pageUrl: "test4.html"
+        },
+        my: {
+            title: "နေပြည်တော် နိုင်ငံတော် ပညာရေးအကယ်ဒမီ (NSA)",
+            type: "အဆင့်မြင့် ပညာရေး တက္ကသိုလ်",
+            location: "ပျဉ်းမနားခရိုင်၊ နေပြည်တော်",
+            desc: "ဝိဇ္ဇာ၊ သိပ္ပံ၊ ဥပဒေ၊ စီးပွားရေးနှင့် နည်းပညာ အပါအဝင် ဘာသာရပ်ပေါင်းစုံကို အဆင့်မြင့်စွာ သင်ကြားပေးနေသော နေပြည်တော်၏ ထိပ်တန်း တက္ကသိုလ်ကြီး ဖြစ်ပါသည်။",
+            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThdyrZkL4r__eOEM6kF0xNZkfmUgGVXQ0ulKFqblslsQ&s=10",
+            pageUrl: "test4.html"
+        }
+    },
+
+    pnpt_sport_farm: {
+        en: {
+            title: "PNPT Sport Farm",
+            type: "Sports & Recreation Park",
+            location: "Pyinmana Township, Naypyitaw",
+            desc: "PNPT Sport Farm is a scenic outdoor leisure destination featuring sports facilities, playgrounds, green gardens, and photo spots suitable for family weekend outings.",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWleUI1IRQ9mddcPgZpDWwj0KGSxEVtg6m8m6w1KboczglxBBEhg-Vvg2mtsamjsSmw3ZaCeJykLWXPVcsI3VKfpxIeSvEyzlDEoAxwxjwucHP5RG7L87ag4-M4MdG7TCxG1QThV=s680-w680-h510-rw",
+            pageUrl: "PNPT.html"
+        },
+        my: {
+            title: "PNPT Sport Farm",
+            type: " အပန်းဖြေစခန်း",
+            location: "ပျဉ်းမနားမြို့နယ်၊ နေပြည်တော်",
+            desc: "ကလေးများအတွက် ကစားကွင်းများ၊  သဘာဝဓာတ်ပုံရိုက်ကွင်းများ ပါဝင်သည့် မိသားစုအပန်းဖြေစခန်း ဖြစ်ပါသည်။",
+            img: "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWleUI1IRQ9mddcPgZpDWwj0KGSxEVtg6m8m6w1KboczglxBBEhg-Vvg2mtsamjsSmw3ZaCeJykLWXPVcsI3VKfpxIeSvEyzlDEoAxwxjwucHP5RG7L87ag4-M4MdG7TCxG1QThV=s680-w680-h510-rw",
+            pageUrl: "PNPT.html"
+        }
+    },
+    thapyaygone_market:{
+        en:{
+            title:"Thapyaygone Market",
+            type:"Public Market & Shopping Hub",
+            location:"Zabuthiri Township",
+            desc:"A famous central shopping precinct known for electronics, clothing, local produce, and lively food stalls.",
+            img:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/e4/32/25/thapyaygone-market-of.jpg?w=1200&h=1200&s=1",
+            pageUrl:"thapyaygone.html"
+        },
+        my:{
+            title:"သပြေကုန်းဈေး",
+            type:"အများပြည်သူသုံး ဈေးနှင့် ကုန်သွယ်ရေးဗဟို",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"အဝတ်အထည်၊ လျှပ်စစ်ပစ္စည်းများနှင့် အစားအသောက်မျိုးစုံ ရရှိနိုင်သော စည်ကားလှသည့် ဈေးကြီး။",
+            img:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/e4/32/25/thapyaygone-market-of.jpg?w=1200&h=1200&s=1",
+            pageUrl:"thapyaygone.html"
+        }
+    },
+    junction_supermarket:{
+        en:{
+            title:"Junction Supermarket",
+            type:"Shopping Mall",
+            location:"Zabuthiri Township",
+            desc:"A convenient modern retail shopping complex offering groceries, branded goods, and family dining options.",
+            img:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/28/30/ae/junction-naypyitaw.jpg?w=1400&h=-1&s=1",
+            pageUrl:"junction.html"
+        },
+        my:{
+            title:"Junction Supermarket",
+            type:"ဈေးဝယ်စင်တာ",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"ခေတ်မီဆန်းသစ်သော ဈေးဝယ်စင်တာဖြစ်ပြီး လူသုံးကုန်ပစ္စည်းများနှင့် စားသောက်ဆိုင်များ ပါဝင်သည်။",
+            img:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/28/30/ae/junction-naypyitaw.jpg?w=1400&h=-1&s=1",
+            pageUrl:"junction.html"
+        }
+    },
+    myoma_market:{
+        en:{
+            title:"Myoma market",
+            type:"Public Market & Shopping Hub",
+            location:"Zabuthiri Township",
+            desc:"The main traditional wholesale and retail marketplace reflecting the vibrant local trade of Pyinmana.",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkejyNlWflYFSy0qKP2eLaIVqe6RzGgcTzbkNd0Rua3NnxPZWV7eV2bujduc5VXnpjLA-nh2dYdzBxbcquar_KE2hk7I4HXnKmmHuX28dxfAXbzsFW1r5_MEdFH_V4N00cVgIE=s1360-w1360-h1020-rw",
+            pageUrl:"myoma.html"
+        },
+        my:{
+            title:"မြို့မစျေး",
+            type:"အများပြည်သူသုံး ဈေးနှင့် ကုန်သွယ်ရေးဗဟို",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"ဒေသတွင်း ထုတ်ကုန်များနှင့် ကုန်စည်မျိုးစုံ အဓိက အရောင်းအဝယ်ပြုလုပ်ရာ မြို့မဈေးကြီး။",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkejyNlWflYFSy0qKP2eLaIVqe6RzGgcTzbkNd0Rua3NnxPZWV7eV2bujduc5VXnpjLA-nh2dYdzBxbcquar_KE2hk7I4HXnKmmHuX28dxfAXbzsFW1r5_MEdFH_V4N00cVgIE=s1360-w1360-h1020-rw",
+            pageUrl:"myoma.html"
+        }
+    },
+    ahara_thukha_market:{
+        en:{
+            title:"Ahara Thukha Market",
+            type:"Public Market & Shopping Hub",
+            location:"Zabuthiri Township",
+            desc:"The main traditional wholesale and retail marketplace reflecting the vibrant local trade of Pyinmana.",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlL5O-7nmN41jrpn3fae3TbMH3VmWQTCfmopQDLqJjYQivs_-GB_ikhptFlkMnxQB05LzbpTT6x2QW6pIo48PGN7e_DlE3uDLwcKaDijksbYg6LksOUwpoomaNvqTLQngffS8yEZw=s1360-w1360-h1020-rw",
+            pageUrl:"Ahara.html"
+        },
+        my:{
+            title:"အဟာရသုခဈေး",
+            type:"အများပြည်သူသုံး ဈေးနှင့် ကုန်သွယ်ရေးဗဟို",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"ဒေသတွင်း ထုတ်ကုန်များနှင့် ကုန်စည်မျိုးစုံ အဓိက အရောင်းအဝယ်ပြုလုပ်ရာ အဟာရသုခဈေးကြီး။",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlL5O-7nmN41jrpn3fae3TbMH3VmWQTCfmopQDLqJjYQivs_-GB_ikhptFlkMnxQB05LzbpTT6x2QW6pIo48PGN7e_DlE3uDLwcKaDijksbYg6LksOUwpoomaNvqTLQngffS8yEZw=s1360-w1360-h1020-rw",
+            pageUrl:"Ahara.html"
+        }
+    },
+    water_fountain_garden:{
+        en:{
+            title:"Waterfountain Garden",
+            type:"Recreation Park",
+            location:"Zabuthiri Township",
+            desc:"A sprawling recreational park featuring musical water fountains, illuminated bridges, and scenic walkways.",
+            img:"https://admin.tourism.gov.mm/storage/RegionContent/01KKTT9VF60YZ2H82DRV3BGD4Z.jpg",
+            pageUrl:"waterfountain.html"
+        },
+        my:{
+            title:"ရေပန်းဉယျာဉ်",
+            type:"အပန်းဖြေစခန်း",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"ဂီတရေပန်းများ၊ ညဘက် မီးရောင်စုံရှုခင်းများနှင့် သာယာလှပသော သဘာဝအပန်းဖြေ ပန်းခြံကြီး။",
+            img:"https://admin.tourism.gov.mm/storage/RegionContent/01KKTT9VF60YZ2H82DRV3BGD4Z.jpg",
+            pageUrl:"waterfountain.html"
+        }
+    },
+    wunna_theikdi_stadium:{
+        en:{
+            title:"Wunna Theikdi Stadium",
+            type:"Recreation Park",
+            location:"Zabuthiri Township",
+            desc:"A premier international multi-purpose sports complex capable of hosting major national games and events.",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnN3q0nqxU066pB_gnJr6ckDiJuuScEfhDzmvA4fB_t4xx3XotFS7KbOA2F2n35-yR-8hyUbdlpEWpoZo6B7ZRGRb2eAVX3FB95JtfAL-q66HnoPxiNNLZqOlMICeTOpUt_sWnG=s1360-w1360-h1020-rw",
+            pageUrl:"Wunna Theikdi Stadium.html"
+        },
+        my:{
+            title:"ဝဏ္ဏသိဒ္ဓိ အားကစားကွင်း",
+            type:"အပန်းဖြေစခန်း",
+            location:"ဇမ္ဗူသီရိမြို့နယ်",
+            desc:"နိုင်ငံတကာအဆင့်မီ အားကစားပြိုင်ပွဲများနှင့် ပွဲလမ်းသဘင်များ ကျင်းပရာ အားကစားကွင်းကြီး။",
+            img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnN3q0nqxU066pB_gnJr6ckDiJuuScEfhDzmvA4fB_t4xx3XotFS7KbOA2F2n35-yR-8hyUbdlpEWpoZo6B7ZRGRb2eAVX3FB95JtfAL-q66HnoPxiNNLZqOlMICeTOpUt_sWnG=s1360-w1360-h1020-rw",
+            pageUrl:"Wunna Theikdi Stadium.html"
+        }
+    },
+    maravijaya:{
+       en:{
+            title:"Maravijaya Buddha Image",
+            type:"Famous Pagoda",
+            location:"Dekkhinathiri Township",
+            desc:"The world's tallest sitting marble Buddha statue, a monumental engineering feat.",
+            img:"https://d3fphkxyf5o5bm.cloudfront.net/image-resize/format=webp,w=1200/QwRY54Li1HMwD7oNfq5YUyUidOqo38UbiKSa4kC3RV",
+            pageUrl:"Maravijaya.html"
+        },
+        my:{
+            title:"မာရဝိဇယ ဗုဒ္ဓရုပ်ပွားတော်မြတ်ကြီး",
+            type:"ထင်ရှားသောဘုရားစေတီ",
+            location:"ဒက္ခိဏသီရိမြို့နယ်",
+            desc:"ကမ္ဘာ့အမြင့်ဆုံး ထိုင်တော်မူ စကျင်ကျောက်ဆစ် ဗုဒ္ဓရုပ်ပွားတော်ကြီး။",
+            img:"https://d3fphkxyf5o5bm.cloudfront.net/image-resize/format=webp,w=1200/QwRY54Li1HMwD7oNfq5YUyUidOqo38UbiKSa4kC3RV",
+            pageUrl:"Maravijaya.html"
+        }
+    }
+};
+
+const districtData = {
+    ottara: {
+        btnId: 'btnOttara', shapeId: 'shapeOttara',
+       en: {
+           title: "Ottara District (ဥတ္တရခရိုင်)",
+           desc: "The primary tourism and landmark administrative hub of Naypyitaw. Houses majestic religious architecture and beautiful animal parks.",
+         nodes: [ 
+        { id: "polytechnic_univ", title: "Naypyitaw State Polytechnic University", desc: "A key technical and engineering higher education institution fostering innovation and technological development." },
+        { id: "ocean_supercenter", title: "Ocean Supercenter (Ottarathiri)", desc: "A reliable shopping mall and grocery destination for essentials and dining options." },
+        { id: "hlay_khwe_taung", title: "Hlay Khwe Taung Pagoda", desc: "A scenic hilltop Buddhist temple offering panoramic views of lush green natural landscapes." },
+        { id: "maha_bawdi", title: "Buddhagaya Thatta Thattaha Maha Bawdi Pagoda", desc: "A grand 162-foot replica of the ancient Mahabodhi Temple in Bodh Gaya, India." },
+        { id: "pinlong_hot_spring", title: "Pinlong Hot Spring Resort", desc: "A relaxing eco-resort destination featuring natural hot mineral baths surrounded by lush greenery." },
+        { id: "sakkyaramsi_buddha", title: "Maha Sakkyaramsi Standing Buddha Image", desc: "A magnificent standing marble Buddha statue representing serene religious artistry." }
+    ]
+   },
+        
+        my: {
+    title: "ဥတ္တရခရိုင်",
+    desc: "နေပြည်တော်၏ ထင်ရှားသော ခရီးသွားလုပ်ငန်းနှင့် အုပ်ချုပ်ရေးဆိုင်ရာ ဗဟိုနယ်မြေ ဖြစ်သည်။ ခမ်းနားထည်ဝါသော သာသနိကအဆောက်အအုံများနှင့် သဘာဝအပန်းဖြေနေရာများ တည်ရှိပါသည်။",
+    nodes: [ 
+        { id: "polytechnic_univ", title: "နေပြည်တော် နည်းပညာတက္ကသိုလ်", desc: "နည်းပညာနှင့် အင်ဂျင်နီယာဘာသာရပ်များကို အဓိကသင်ကြားပေးသော အဆင့်မြင့်ပညာရေး တက္ကသိုလ်။" },
+        { id: "ocean_supercenter", title: "အိုရှန်း စူပါစင်တာ (ဥတ္တရသီရိ)", desc: "နေ့စဉ်သုံး ကုန်ပစ္စည်းများနှင့် အစားအသောက်များကို တစ်နေရာတည်းတွင် ဝယ်ယူနိုင်သော စူပါစင်တာ။" },
+        { id: "hlay_khwe_taung", title: "လှေခွက်တောင် စေတီတော်", desc: "သဘာဝတောင်တန်း အလှအပများနှင့် မြို့ပြရှုခင်းကို အထက်စီးမှ ကြည့်ရှုနိုင်သည့် တောင်ထိပ်စေတီတော်။" },
+        { id: "maha_bawdi", title: "ဗုဒ္ဓဂယာ သတ္တသတ္တာဟ မဟာဗောဓိစေတီတော်မြတ်ကြီး", desc: "အိန္ဒိယနိုင်ငံ ဗုဒ္ဓဂယာရှိ မဟာဗောဓိ စေတီတော်ပုံစံအတိုင်း တည်ထားကိုးကွယ်ထားသော ၁၆၂ ပေမြင့် စေတီတော်။" },
+        { id: "pinlong_hot_spring", title: "ပင်လုံ ရေပူစမ်း အပန်းဖြေစခန်း", desc: "သဘာဝရေပူစမ်းတွင် စိမ်ရင်း စိမ်းလန်းသော သဘာဝပတ်ဝန်းကျင်အလှကို ခံစားနိုင်သည့် အပန်းဖြေစခန်း။" },
+        { id: "sakkyaramsi_buddha", title: "မဟာသကျရံသီ ရပ်တော်မူ ရုပ်ပွားတော်မြတ်ကြီး", desc: "ကြည်ညိုဖွယ်ရာ ရာဇဝင်နှင့် သပ္ပါယ်လှသော ကျောက်ဆစ် မဟာသကျရံသီ ရပ်တော်မူ ရုပ်ပွားတော်။" }
+    ]
+}
+    },
+    zeyarthiri: {
+        btnId: 'btnZeyarthiri', shapeId: 'shapeZeyarthiri',
+        en: {
+            title: "Zeyarthiri District (ဇေယျာသီရိခရိုင်)",
+            desc: "The pristine northeastern domain combining clean governance corridors and agricultural technology centers.",
+            // Zeyarthiri District / Zeyarthiri Zone Nodes
+nodes: [
+    { id: "safari", title: "Naypyitaw Safari Park", desc: "An open-concept wildlife reserve featuring domestic, Asian, and African zones." },
+    { id: "zoo", title: "Naypyitaw Zoological Gardens", desc: "The largest zoo in Myanmar with an impressive penguin house and dynamic wildlife habitats." },
+    { id: "landmark_garden", title: "National Landmark Garden", desc: "A vast cultural park showcasing miniature replicas of Myanmar’s famous landmarks, pagodas, and heritage sites." },
+    { id: "defence_museum", title: "Defence Services Museum", desc: "A massive museum showcasing the history, technology, and military heritage of the Myanmar Armed Forces." },
+    { id: "fallen_heroes", title: "Memorial to the Fallen Heroes", desc: "A state memorial built on a hilltop honoring fallen soldiers and civilians with traditional marble craftsmanship." },
+    { id: "uppatasanti", title: "Uppatasanti Pagoda", desc: "The iconic replica of Shwedagon Pagoda, anchoring the primary spiritual vista." },
+    { id: "white_elephant", title: "White Elephant House", desc: "Located within the pagoda grounds, hosting revered auspicious royal white elephants." },
+    { id: "yezin_agri", title: "Yezin Agricultural University Campus", desc: "The beautiful educational green landscape specialized in advanced farming sciences." },
+    { id: "yezin_vet", title: "University of Veterinary Science", desc: "Leading specialized veterinary academy in Myanmar surrounded by research model farms." },
+    { id: "yezin_forest", title: "University of Forestry and Environmental Science", desc: "The premier Forestry university offering specialized undergraduate and postgraduate degrees." },
+    { id: "pobbathiri_market", title: "Pobba Thiri Market", desc: "A major commercial hub offering fresh produce, local delicacies, and everyday essentials." },
+{ id: "ywadaw_market", title: "Mingalar Market (Ywadaw)", desc: "A bustling neighborhood market serving the local Ywadaw community with fresh goods and groceries." },
+]
+        },
+        my: {
+            title: "ဇေယျာသီရိခရိုင် အကျဉ်းချုပ်",
+            desc: "စိုက်ပျိုးရေးနှင့် တက္ကသိုလ်နယ်မြေများ တည်ရှိရာ အရှေ့မြောက်ဘက်ဇုန် ဖြစ်သည်။",
+            // မြန်မာဘာသာဖြင့် ပြသရန် Nodes
+nodes: [
+    { id: "safari", title: "နေပြည်တော် ဆာဖာရီဥယျာဉ်", desc: "တောရိုင်းတိရစ္ဆာန်များကို သဘာဝအတိုင်း လွှတ်ကျောင်းမွေးမြူထားသော ဆာဖာရီကွင်း။" },
+    { id: "zoo", title: "နေပြည်တော် တိရစ္ဆာန်ဥယျာဉ်", desc: "ပင်ဂွင်းအိမ်အပါအဝင် ကမ္ဘာ့အဆင့်မီ ဆန်းပြားသော သတ္တဝါမျိုးစုံကို ပြသထားသည့် တိရစ္ဆာန်ရုံ။" },
+    { id: "landmark_garden", title: "အမျိုးသားမှတ်ကျောက်ဥယျာဉ်", desc: "မြန်မာနိုင်ငံတစ်ဝန်းရှိ ထင်ရှားသော စေတီပုထိုးများနှင့် သမိုင်းဝင် အဆောက်အအုံငယ်များကို စုစည်းပြသထားသော ပန်းခြံ။" },
+    { id: "defence_museum", title: "တပ်မတော်စစ်သမိုင်းပြတိုက်", desc: "မြန်မာ့တပ်မတော်၏ သမိုင်းကြောင်း၊ လက်နက်ကိရိယာများနှင့် စစ်ဘက်ဆိုင်ရာ ပြပွဲများကို ကျယ်ဝန်းစွာ ပြသထားသည့် ပြတိုက်။" },
+    { id: "fallen_heroes", title: "သူရဲကောင်းဗိမာန် (နေပြည်တော်)", desc: "နိုင်ငံတော်အတွက် ပေးဆပ်ခဲ့ကြသော စစ်သည်များနှင့် စက်မှု၊ လူမှုအဆင်ဆင့် ရဲဘော်များအား ဂုဏ်ပြုစိုက်ထူထားသည့် ဗိမာန်။" },
+    { id: "uppatasanti", title: "ဥပ္ပါတသန္တိ စေတီတော်ကြီး", desc: "ရွှေတိဂုံစေတီတော်ပုံစံတူ ထုထည်ခမ်းနားထည်ဝါစွာ တည်ထားသော နေပြည်တော်၏ အထိမ်းအမှတ်ဗဟို။" },
+    { id: "white_elephant", title: "ရတနာဆင်ဖြူတော်ဝင်း", desc: "ဘုရားရင်ပြင်တော်အနီးရှိ မြန်မာ့ရိုးရာအယူအဆအရ လာဘ်လာဘတိုးပွားစေသော ရတနာဆင်ဖြူတော်များ ထိန်းသိမ်းရာနေရာ။" },
+    { id: "yezin_agri", title: "ရေဆင်းစိုက်ပျိုးရေးတက္ကသိုလ်", desc: "အဆင့်မြင့် စိုက်ပျိုးရေးသိပ္ပံ ဘာသာရပ်များကို အထူးပြုသင်ကြားပေးသော စိမ်းလန်းစိုပြည်သည့် တက္ကသိုလ်နယ်မြေ။" },
+    { id: "yezin_vet", title: "မွေးမြူရေးဆိုင်ရာဆေးတက္ကသိုလ် (ရေဆင်း)", desc: "သုတေသနမော်ဒယ်စိုက်ခင်းများနှင့် တိရစ္ဆာန်ကုသရေးဆိုင်ရာ ထိပ်တန်း အထူးပြုတက္ကသိုလ်။" },
+    { id: "yezin_forest", title: "ရေဆင်းသစ်တောနှင့်ပတ်ဝန်းကျင်ဆိုင်ရာတက္ကသိုလ်", desc: "သစ်တောရေးရာနှင့် သဘာဝပတ်ဝန်းကျင် ထိန်းသိမ်းရေးဆိုင်ရာ အဓိက အဆင့်မြင့်တက္ကသိုလ်။" },
+    { id: "pobbathiri_market", title: "ပုဗ္ဗသီရိဈေးကြီး", desc: "လတ်ဆတ်သော သီးနှံများ၊ ဒေသထွက်ကုန်များနှင့် အိမ်သုံးပစ္စည်းများ ရရှိနိုင်သော အဓိက ဈေးကြီး။" },
+{ id: "ywadaw_market", title: "မင်္ဂလာဈေး (ရွာတော်)", desc: "ရွာတော်နှင့် ပတ်ဝန်းကျင်မှ ဒေသခံများအတွက် လတ်ဆတ်သော အစားအသောက်နှင့် ကုန်စုံပစ္စည်းများ ရရှိနိုင်သော ဈေး။" },
+]
+        }
+    },
+    dekkhina: {
+        btnId: 'btnDekkhina', shapeId: 'shapeDekkhina',
+        en: {
+            title: "Dekkhina District (ဒက္ခိဏခရိုင်)",
+            desc: "The monumental southern gateway showcasing giant sculptures and prime modern shopping hubs.",
+            nodes: [
+                { id: "maravijaya", title: "Maravijaya Buddha Image", desc: "The world's tallest sitting marble Buddha statue, a monumental engineering feat." },
+            ]
+        },
+        my: {
+            title: "ဒက္ခိဏခရိုင် အကျဉ်းချုပ်",
+            desc: "ကမ္ဘာ့အကြီးဆုံး စကျင်ဗုဒ္ဓရုပ်ပွားတော်ကြီးနှင့် ခေတ်မီရှော့ပင်းမောများ တည်ရှိရာ ဇုန်။",
+            nodes: [
+                { id: "maravijaya", title: "မာရဝိဇယ ဗုဒ္ဓရုပ်ပွားတော်မြတ်ကြီး", desc: "ကမ္ဘာ့အမြင့်ဆုံး ထိုင်တော်မူ စကျင်ကျောက်ဆစ် ဗုဒ္ဓရုပ်ပွားတော်ကြီး။" },
+            ]
+        }
+    },
+    pyinmana: {
+        btnId: 'btnPyinmana', shapeId: 'shapePyinmana',
+        en: {
+            title: "Pyinmana District (ပျဉ်းမနားခရိုင်)",
+            desc: "The historic foundation offering deep historical insights and lively city centers.",
+            nodes: [
+    { id: "nsa_univ", title: "Naypyitaw State Academy (NSA)", desc: "A prestigious multidisciplinary tertiary institution providing modern higher education across diverse disciplines." },
+    { id: "thapyaygone_market", title: "Thapyaygone Market", desc: "A famous central shopping precinct known for electronics, clothing, local produce, and lively food stalls." },
+    { id: "junction_supermarket", title: "Junction Supermarket", desc: "A convenient modern retail shopping complex offering groceries, branded goods, and family dining options." },
+    { id: "myoma_market", title: "Myoma Market", desc: "The main traditional wholesale and retail marketplace reflecting the vibrant local trade of Pyinmana." },
+    { id: "ahara_thukha_market", title: "Ahara Thukha Market", desc: "A major local fresh food hub offering regional produce, fresh meats, seafood, and everyday cooking essentials." },
+    { id: "water_fountain_garden", title: "Water Fountain Garden", desc: "A sprawling recreational park featuring musical water fountains, illuminated bridges, and scenic walkways." },
+    { id: "pnpt_sport_farm", title: "PNPT Sport Farm", desc: "A popular family-friendly recreation spot featuring outdoor sports facilities, green landscapes, and play areas." },
+    { id: "wunna_theikdi_stadium", title: "Wunna Theikdi Stadium", desc: "A premier international multi-purpose sports complex capable of hosting major national games and events." }
+]
+        },
+        my: {
+            title: "ပျဉ်းမနားခရိုင် အကျဉ်းချုပ်",
+            desc: "နေပြည်တော် နယ်မြေ၏ သမိုင်းအခြေခံမြစ်ဖျားခံရာ မြို့ဟောင်းဇုန် ဖြစ်သည်။",
+            nodes: [
+    { id: "nsa_univ", title: "နေပြည်တော် နိုင်ငံတော် ပညာရေးအကယ်ဒမီ (NSA)", desc: "ဘာသာရပ်ပေါင်းစုံ အဆင့်မြင့်ပညာရပ်များကို လေ့ကျင့်သင်ကြားပေးလျက်ရှိသော အစိုးရတက္ကသိုလ်ကြီး။" },
+    { id: "thapyaygone_market", title: "သပြေကုန်းဈေး", desc: "အဝတ်အထည်၊ လျှပ်စစ်ပစ္စည်းများနှင့် အစားအသောက်မျိုးစုံ ရရှိနိုင်သော စည်ကားလှသည့် ဈေးကြီး။" },
+    { id: "junction_supermarket", title: "Junction စူပါမားကတ်", desc: "ခေတ်မီဆန်းသစ်သော ဈေးဝယ်စင်တာဖြစ်ပြီး လူသုံးကုန်ပစ္စည်းများနှင့် စားသောက်ဆိုင်များ ပါဝင်သည်။" },
+    { id: "myoma_market", title: " မြို့မဈေး", desc: "ဒေသတွင်း ထုတ်ကုန်များနှင့် ကုန်စည်မျိုးစုံ အဓိက အရောင်းအဝယ်ပြုလုပ်ရာ သမိုင်းဝင် မြို့မဈေးကြီး။" },
+    { id: "ahara_thukha_market", title: "အာဟာရသုခဈေး", desc: "လတ်ဆတ်သော သီးနှံများ၊ အသားငါးများနှင့် ဟင်းသီးဟင်းရွက်များ ရရှိနိုင်သော အဓိက သားငါးဈေး။" },
+    { id: "water_fountain_garden", title: "ရေပန်းဉယျာဉ်", desc: "ဂီတရေပန်းများ၊ ညဘက် မီးရောင်စုံရှုခင်းများနှင့် သာယာလှပသော သဘာဝအပန်းဖြေ ပန်းခြံကြီး။" },
+    { id: "pnpt_sport_farm", title: "PNPT Sport Farm", desc: "မိသားစုများနှင့် ကလေးများ အပန်းဖြေနိုင်ရန် အားကစားကွင်းများနှင့် သဘာဝရှုခင်းများ ပါဝင်သောနေရာ။" },
+    { id: "wunna_theikdi_stadium", title: "ဝဏ္ဏသိဒ္ဓိ အားကစားကွင်း", desc: "နိုင်ငံတကာအဆင့်မီ အားကစားပြိုင်ပွဲများနှင့် ပွဲလမ်းသဘင်များ ကျင်းပရာ ကွင်းကျယ်ကြီး။" }
+]
+        }
+    }
+};
+
+const pageLocalization = {
+    en: {
+        langBtn: "မြန်မာ",
+        brand: "Naypyitaw Directory",
+        home: "Home",
+        categories: "Categories",
+        trip: "Trip planning",
+        about: "About",
+        contact: "Contact",
+        searchPlaceholder: "Search...",
+        tripTitle: "Naypyitaw 4-Districts Route Planner",
+        tripSub: "Explore destinations sequentially by choosing specific districts.",
+        insightsTitle: "Zone Insights",
+        insightsDesc: "Click the interactive crystal zones directly to preview seamless routes.",
+        panelTitle: "District Overview",
+        timelineHeading: "Optimized Proximity Route",
+        exploreBtn: "Explore",
+        categoryLabel: "Category:",
+        locationLabel: "Location:",
+        footer: "© 2026 Naypyitaw. All Rights Reserved."
+    },
+    my: {
+        langBtn: "English",
+        brand: "နေပြည်တော် လမ်းညွှန်",
+        home: "ပင်မစာမျက်နှာ",
+        categories: "ကဏ္ဍများ",
+        trip: "ခရီးစဉ်စီစဉ်ခြင်း",
+        about: "ကျွန်ုပ်တို့အကြောင်း",
+        contact: "ဆက်သွယ်ရန်",
+        searchPlaceholder: "ရှာဖွေရန်...",
+        tripTitle: "နေပြည်တော် ခရိုင် ၄ ခရိုင် လမ်းကြောင်းစီစဉ်စနစ်",
+        tripSub: "ခရိုင်အလိုက် လည်ပတ်စရာ နေရာများကို တစ်ဆင့်ချင်းစီ အလွယ်တကူ ရှာဖွေလေ့လာပါ။",
+        insightsTitle: "ခရိုင်အလိုက် လေ့လာရန်",
+        insightsDesc: "မြေပုံပေါ်ရှိ ခရိုင်ကွက်များကို တိုက်ရိုက်နှိပ်၍ လမ်းကြောင်းများကို ကြည့်ရှုနိုင်သည်။",
+        panelTitle: "ခရိုင်အချက်အလက်",
+        timelineHeading: "အနီးစပ်ဆုံး ခရီးစဉ်လမ်းကြောင်း",
+        exploreBtn: "အသေးစိတ် ကြည့်မည်",
+        categoryLabel: "အမျိုးအစား -",
+        locationLabel: "တည်နေရာ -",
+        footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။"
+    }
+};
+
+let currentDistrict = 'zeyarthiri';
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+function renderPage() {
+    const data = pageLocalization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+
+    document.getElementById('tripTitle').textContent = data.tripTitle;
+    document.getElementById('tripSub').textContent = data.tripSub;
+    document.getElementById('insightsTitle').textContent = data.insightsTitle;
+    document.getElementById('insightsDesc').textContent = data.insightsDesc;
+    document.getElementById('timelineHeading').textContent = data.timelineHeading;
+
+    const currentData = districtData[currentDistrict][currentLang];
+    document.getElementById('panelTitle').textContent = currentData.title;
+    document.getElementById('panelDesc').textContent = currentData.desc;
+
+    let timelineHtml = '';
+    currentData.nodes.forEach(node => {
+        // Only show button if pageUrl is present in placeDetailsData
+        const details = placeDetailsData[node.id] ? placeDetailsData[node.id][currentLang] : null;
+        const hasPage = details && details.pageUrl;
+
+        timelineHtml += `
+            <div class="timeline-node">
+                <div class="timeline-node-title">${node.title}</div>
+                <div class="timeline-node-desc">${node.desc}</div>
+                ${hasPage ? `
+                    <a class="action-link" onclick="openDetailsModal('${node.id}')">
+                        <span>${data.exploreBtn}</span> <i class="fa-solid fa-chevron-right ms-1"></i>
+                    </a>
+                ` : ''}
+            </div>
+        `;
+    });
+    document.getElementById('timelineContent').innerHTML = timelineHtml;
+
+    Object.keys(districtData).forEach(key => {
+        const btn = document.getElementById(districtData[key].btnId);
+        const shape = document.getElementById(districtData[key].shapeId);
+        if (key === currentDistrict) {
+            btn.classList.add('active');
+            shape.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+            shape.classList.remove('active');
+        }
+    });
+}
+
+// Function to open Large Modal Popup with Image
+function openDetailsModal(placeId) {
+    const detail = placeDetailsData[placeId] ? placeDetailsData[placeId][currentLang] : null;
+    const labels = pageLocalization[currentLang];
+    const detailBtn = document.getElementById('modalDetailBtn');
+
+    if (detail) {
+        document.getElementById('modalTitle').textContent = detail.title;
+        document.getElementById('modalBody').innerHTML = `
+            <div class="row align-items-center g-4">
+                <div class="col-md-7">
+                    <div class="mb-3">
+                        <span class="info-label"><i class="fa-solid fa-tag me-2"></i>${labels.categoryLabel}</span>
+                        <span>${detail.type}</span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="info-label"><i class="fa-solid fa-location-dot me-2"></i>${labels.locationLabel}</span>
+                        <span>${detail.location}</span>
+                    </div>
+                    <div>
+                        <p class="text-muted leading-relaxed mb-0">${detail.desc}</p>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <img src="${detail.img}" alt="${detail.title}" class="modal-place-img">
+                </div>
+            </div>
+        `;
+
+        // Hide button ONLY if the place is 'white_elephant' or has no pageUrl
+        if (placeId === 'white_elephant' || !detail.pageUrl) {
+            detailBtn.style.display = 'none';
+        } else {
+            detailBtn.style.display = 'inline-block';
+            detailBtn.setAttribute('href', detail.pageUrl);
+        }
+    } else {
+        document.getElementById('modalTitle').textContent = "Details";
+        document.getElementById('modalBody').innerHTML = `
+            <div class="p-3 text-center">
+                <p class="text-muted mb-0">Detailed information for this spot will be available soon.</p>
+            </div>
+        `;
+        detailBtn.style.display = 'none';
+    }
+
+    var myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+    myModal.show();
+}
+
+function switchDistrict(districtKey) {
+    currentDistrict = districtKey;
+    renderPage();
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    renderPage();
+};
+
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        renderPage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', renderPage);
+
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+</script>
+</body>
+</html>

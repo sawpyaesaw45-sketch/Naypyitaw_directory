@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education - Naypyitaw Directory</title>
+
+<!-- Bootstrap CSS & FontAwesome Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f6f7;
+}
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F;
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+/* Nav Language Button Styling */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+    color: #fff;
+    font-size: 2.5vh;
+}
+
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+/* Search Box tweaks */
+/* Search Box Container */
+.search-box {
+    margin-top: 15px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+/* Suggestions List UI */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+/* Hide elements utility */
+.hidden {
+    display: none !important;
+}
+/* Custom Center Alert Box Styles */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+#sidebarToggle {
+    display: none;
+}
+/* --- RIGHT MAIN CONTENT AREA --- */
+.content-area {
+    flex: 1;
+    margin-left: 260px; /* Push content to right of sidebar */
+    padding: 30px;
+}
+.hero-banner {
+    background: linear-gradient(rgba(17, 75, 95, 0.85), rgba(17, 75, 95, 0.95)), 
+                url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920') center/cover no-repeat;
+    padding: 60px 20px; text-align: center; color: white;
+}
+/* Ensure main content uses the same ID for sidebar alignment */
+#edu-section { flex: 1; padding-left: 210px; padding-top: 70px; transition: all 0.35s ease; }
+@media(max-width: 992px) { #edu-section { padding-left: 0; } }
+
+/* Use the same card-item and hidden classes as the Scenic page */
+.card-item { transition: all 0.4s ease; }
+.card-item.hidden { display: none !important; }
+/* --- MIDDLE FILTER BUTTONS & CARDS --- */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: white;
+    border: 1px solid #114B5F;
+    color: #114B5F;
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+    margin-top: 30px;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: #114B5F;
+    color: white;
+}
+
+/* Cards Design */
+.edu-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    height: 100%;
+    border: 1px solid #eef2f5;
+}
+
+.edu-card:hover {
+    transform: translateY(-5px);
+}
+
+.edu-img-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+.edu-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge-type {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #114B5F;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.edu-body {
+    padding: 20px;
+}
+
+.edu-body h5 {
+    font-weight: 600;
+    color: #114B5F;
+    margin-bottom: 12px;
+}
+
+.edu-meta {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.hidden {
+    display: none !important;
+}
+/* Update your main and footer styles to ensure the layout forces the footer down */
+/* Update your main tag */
+main { 
+    padding-bottom: 40px;
+    background-color: #f4f6f7;
+    flex: 1 0 auto; /* Changed from flex: 1 to ensure it grows properly */
+}
+.action-link { display: inline-block; margin-top: 15px; color: #114B5F; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; }
+.action-link:hover { color: #E4B34F; }
+/* Update your footer */
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 4000;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Add to your existing @media (max-width: 991px) block */
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+
+/* Responsive adjustment */
+@media (max-width: 991px) {
+    .content-area {
+        margin-left: 0;
+    }
+    .desktop-menu {
+        display: none;
+    }
+     #sidebarToggle {
+        display: block;
+    }
+
+    .slidebar {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+
+    .slidebar.active {
+        transform: translateX(0);
+    }
+
+    .navbar-collapse {
+        display: none !important;
+    }
+
+    .dropdown-item {
+        margin-left: 20px;
+    }
+    footer {
+        padding-left: 0; /* Removes indent on mobile */
+    }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+
+<!-- Header Navbar Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link  txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Mobile Sidebar -->
+<ul class="slidebar">
+    <!-- Search Box Container -->
+<div class="search-box mb-3 px-2">
+    <div class="search-container">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+        </div>
+        <!-- Search Suggestions Dropdown -->
+        <div id="searchSuggestions" class="suggestions-box hidden"></div>
+    </div>
+</div>
+    <li><a class=" txt-home" href="home.html">Home</a></li>
+   <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="nav-link actived txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="senic spot.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+
+<main id="edu-section">
+    <div class="hero-banner">
+        <div class="container position-relative">
+            <a href="categories.html" class="btn btn-sm btn-outline-light position-absolute start-0 top-0"><i class="fa-solid fa-arrow-left" style="margin-right: 10px;"></i>Back</a>
+            <h1 id="heroTitle">Education</h1>
+            <p id="heroSubtitle">Explore universities  in Naypyitaw</p>
+        </div>
+    </div>
+
+        
+
+        <!-- Filter -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="university">Universities</button>
+        </div>
+
+            <!-- Grid Items -->
+            <div class="row g-4" id="cardsGrid">
+                <!-- University Card -->
+                <div class="col-md-4 edu-item-card" data-category="university">
+                    <div class="edu-card">
+                        <div class="edu-img-wrapper">
+                            <img src="npt photos/yezin1.jpg" alt="Yezin University">
+                            <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+                        </div>
+                        <div class="edu-body">
+                            <h5 class="cardTitle" data-en="Yezin Agricultural University" data-my="ရေဆင်းစိုက်ပျိုးရေးတက္ကသိုလ်">Yezin Agricultural University</h5>
+                            <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zeyarthiri Township, Naypyitaw" data-my="ဇေယျာသီရိမြို့နယ်၊ နေပြည်တော်">Zeyarthiri Township, Naypyitaw</span></div>
+                            <p class="cardDesc text-muted small mt-2" data-en="The premier agricultural university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန် စိုက်ပျိုးရေးဆိုင်ရာ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier agricultural university offering specialized undergraduate and postgraduate degrees.</p>
+                            <a href="test3.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Nay Pyi Taw State Academy -->
+<div class="col-md-4 edu-item-card" data-category="university">
+    <div class="edu-card">
+        <div class="edu-img-wrapper">
+            <img src="npt photos/nsa1.jpg" alt="NSA">
+            <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+        </div>
+        <div class="edu-body">
+            <h5 class="cardTitle" data-en="NayPyiTaw State Academy" data-my="NayPyiTaw State Academy">NayPyiTaw State Academy</h5>
+            <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zabuthiri Township, Naypyitaw" data-my="ဇဗ္မူသီရိမြို့နယ် နေပြည်တော်">Zabuthiri Township, Naypyitaw</span></div>
+            <p class="cardDesc text-muted small mt-2" data-en="The premier agricultural university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန် အထွေထွေ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier agricultural university offering specialized undergraduate and postgraduate degrees.</p>
+            <a href="test4.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- NayPyiTaw State Polytechnic University -->
+<div class="col-md-4 edu-item-card" data-category="university">
+    <div class="edu-card">
+        <div class="edu-img-wrapper">
+            <img src="npt photos/nspu.jpg" alt="NSPU">
+            <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+        </div>
+        <div class="edu-body">
+            <h5 class="cardTitle" data-en="Nay Pyi Taw State Polytechnic University" data-my="NayPyiTaw State Polytechnic University">NayPyiTaw State Polytechnic University</h5>
+            <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Pobba Thiri , Naypyitaw" data-my="ပုဗ္ဗသီရိမြို့နယ် နေပြည်တော်">Polytechnic Avenue, Pyinmana, Naypyitaw</span></div>
+            <p class="cardDesc text-muted small mt-2" data-en="The premier technological university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန် နည်းပညာဆိုင်ရာ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier technological university offering specialized undergraduate and postgraduate degrees.</p>
+            <a href="test5.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Yezin Forest Polytechnic University -->
+<div class="col-md-4 edu-item-card" data-category="university">
+    <div class="edu-card">
+        <div class="edu-img-wrapper">
+            <img src="npt photos/ufes1.jpg">
+            <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+        </div>
+        <div class="edu-body">
+            <h5 class="cardTitle" data-en="Yezin Forestry and Environmental Science University" data-my="ရေဆင်းသစ်တောနှင့်ပတ်ဝန်းကျင်ဆိုင်ရာတက္ကသိုလ်">Yezin Forestry and Environmental Science University</h5>
+            <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zeyarthiri Township , Naypyitaw" data-my="ဇေယျာသီရိမြို့နယ် နေပြည်တော်"> Zeyarthiri Township , Naypyitaw</span></div>
+            <p class="cardDesc text-muted small mt-2" data-en="The premier Forestry university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန် သစ်တောနှင့်ပတ်ဝန်းကျင်သိပ္ပံဆိုင်ရာ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier Forestry university offering specialized undergraduate and postgraduate degrees.</p>
+            <a href="test8.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Yezin Veterinary Science University -->
+<div class="col-md-4 edu-item-card" data-category="university">
+    <div class="edu-card">
+        <div class="edu-img-wrapper">
+            <img src="npt photos/vsu1.png">
+            <span class="badge-type cardBadge" data-key="uniBadge">University</span>
+        </div>
+        <div class="edu-body">
+            <h5 class="cardTitle" data-en="Yezin Veterinary Science University" data-my="ရေဆင်းမွေးမြူဆေးတက္ကသိုလ်">Yezin Veterinary Science University</h5>
+            <div class="edu-meta"><i class="fa-solid fa-location-dot me-1"></i> <span class="cardLoc" data-en="Zeyarthiri Township , Naypyitaw" data-my="ဇေယျာသီရိမြို့နယ် နေပြည်တော်"> Zeyarthiri Township , Naypyitaw</span></div>
+            <p class="cardDesc text-muted small mt-2" data-en="The premier technological university offering specialized undergraduate and postgraduate degrees." data-my="ဘွဲ့ကြိုနှင့် ဘွဲ့လွန်တိရစ္ဆာန် မွေးမြူရေးနှင့်ကုသရေးဆိုင်ရာ အထူးပြုပညာရပ်များကို သင်ကြားပေးနေသော အဓိကတက္ကသိုလ်ကြီး ဖြစ်သည်။">The premier veterinary university offering specialized undergraduate and postgraduate degrees.</p>
+            <a href="test9.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </main>
+    <!-- FOOTER FRAMEWORK -->
+    <footer>
+           <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>       
+    </footer>
+
+    <!-- Custom Center Alert Box -->
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+<!-- Include this before the closing </body> tag -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+    <!-- INTERACTIVE ENGINE LOGIC SCRIPT -->
+    <script>
+        const localization = {
+            en: {
+                langBtn: "မြန်မာ",
+                brand: "Naypyitaw Directory",
+                title: "Explore Naypyitaw",
+                home: "Home",
+                categories: "Categories",
+                edu: "Education",
+                scenic: "Scenic Spots",
+                markets: "Markets",
+                hotels: "Hotels & Resorts",
+                about: "About",
+                trip: "Trip planning",
+                contact: "Contact",
+                searchPlaceholder: "Search...",
+                explore: "Explore More",
+                footer: "© 2026 Naypyitaw. All Rights Reserved.",
+                heroTitle: "Education",
+                heroSubtitle: "Explore universities  in Naypyitaw",
+                btnUni: "Universities",              
+                uniBadge: "University",
+                checkDetail: "Check Details"
+            },
+            my: {
+                langBtn: "English",
+                brand: "နေပြည်တော် လမ်းညွှန်",
+                title: "နေပြည်တော်တစ်ခွင် ရှာဖွေစို့",
+                home: "ပင်မစာမျက်နှာ",
+                categories: "ကဏ္ဍများ",
+                edu: "ပညာရေး",
+                scenic: "အပန်းဖြေနေရာများ",
+                markets: "စျေးဝယ်ရန်နေရာများ",
+                hotels: "ဟိုတယ်နှင့် ရီဆော့တ်များ",
+                about: "ကျွန်ုပ်တို့အကြောင်း",
+                trip: "ခရီးစီစဉ်ခြင်း",
+                contact: "ဆက်သွယ်ရန်",
+                searchPlaceholder: "ရှာဖွေရန်...",
+                explore: "အသေးစိတ်ကြည့်ရန်",
+                footer: "© 2026 Naypyitaw. All Rights Reserved.",
+                heroTitle: "ပညာရေး",
+                heroSubtitle: "နေပြည်တော်ရှိ တက္ကသိုလ်များကို လေ့လာပါ",
+                btnUni: "တက္ကသိုလ်များ",
+                uniBadge: "တက္ကသိုလ်",
+                checkDetail: "အသေးစိတ်ကြည့်ရန်"
+            }
+        };
+ let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+
+// 2. RENDERING ENGINE TRANSLATION ASSIGNMENT
+function updateLanguage() {
+    const data = localization[currentLang];
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+    document.querySelectorAll('.txt-view-details').forEach(el => el.innerHTML = data.viewDetails);
+
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('heroTitle').textContent = data.heroTitle;
+    document.getElementById('heroSubtitle').textContent = data.heroSubtitle;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+
+    document.querySelectorAll('.edu-item-card').forEach(card => {
+        const titleNode = card.querySelector('.cardTitle');
+        const locNode = card.querySelector('.cardLoc');
+        const descNode = card.querySelector('.cardDesc');
+        const badgeNode = card.querySelector('.cardBadge');
+        const detailLinkNode = card.querySelector('.check-detail-link');
+
+        titleNode.textContent = titleNode.getAttribute(`data-${currentLang}`);
+        locNode.textContent = locNode.getAttribute(`data-${currentLang}`);
+        descNode.textContent = descNode.getAttribute(`data-${currentLang}`);
+        
+        const badgeKey = badgeNode.getAttribute('data-key');
+        badgeNode.textContent = localization[currentLang][badgeKey];
+
+        if(detailLinkNode) {
+                detailLinkNode.innerHTML = `${data.checkDetail} <i class="fa-solid fa-chevron-right ms-1"></i>`;
+            }
+    });
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+// Parallel sync runtime storage monitor engine
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+
+// Run layout translation update instantly on document load
+document.addEventListener('DOMContentLoaded', updateLanguage);
+
+// 3. LIVE SEARCH FILTER AND INTERACTION CORES
+document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cardItems = document.querySelectorAll('.card-item');
+    const searchInput = document.getElementById('searchInput');
+
+    function filterCards() {
+        const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+        const searchQuery = searchInput.value.toLowerCase().trim();
+
+        cardItems.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            const cardText = card.textContent.toLowerCase();
+            
+            // Match category and search query[cite: 7]
+            const matchesCategory = (activeFilter === 'all' || cardCategory === activeFilter);
+            const matchesSearch = cardText.includes(searchQuery);
+
+            card.style.display = (matchesCategory && matchesSearch) ? 'block' : 'none';
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterCards();
+        });
+    });
+
+    searchInput.addEventListener('input', filterCards);
+});
+
+// 4. MOBILE DRAWER OVERLAY CONTROLLERS
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+
+document.querySelectorAll(".slidebar a").forEach(link => {
+    link.onclick = function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+    };
+});
+    </script>
+</body>
+</html>

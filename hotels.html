@@ -1,0 +1,652 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotels & Resorts - Naypyitaw Directory</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: #f8fafc; 
+    color: #333; 
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important;
+    white-space: nowrap;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F;
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.nav-item {
+    background-color: transparent;
+}
+.nav-link {
+    color: rgb(255, 255, 255);
+}
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+/* Nav Language Button Layout */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu Theme */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar Responsive Layout */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+.search-box {
+    margin-top: 15px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.main-content {
+    margin-top: 70px;
+    padding-left: 210px;
+    min-height: calc(100vh - 120px);
+}
+
+.hero-banner {
+    background: linear-gradient(rgba(17, 75, 95, 0.85), rgba(17, 75, 95, 0.95)), 
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    padding: 40px 20px; text-align: center; color: white;
+}
+.hero-banner h1 { 
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; 
+    font-size: 38px; 
+    margin-bottom: 8px; 
+    color: #E4B34F;
+    letter-spacing: 1px;
+}
+.hero-banner p { color: rgba(255, 255, 255, 0.8); font-size: 20px; }
+
+.content-card { background: white; border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 25px; display: flex; flex-direction: column; height: 100%; }
+.content-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.img-wrapper { position: relative; height: 180px; background: #eaeaea; }
+.img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.tag-badge { position: absolute; top: 15px; left: 15px; background: #E4B34F; color: #114B5F; font-weight: 600; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
+.card-body-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+.card-body-content h3 { font-size: 1.25rem; color: #114B5F; font-weight: 600; margin-bottom: 10px; }
+.info-line { font-size: 0.85rem; color: #666; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.info-line i { color: #114B5F; width: 16px; }
+
+.action-link { display: inline-block; color: #114B5F; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s; margin-top: auto; }
+.action-link:hover { color: #E4B34F; }
+
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 2600;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+#sidebarToggle {
+    display: none;
+}
+
+@media(max-width: 992px) {
+    .main-content {
+        padding-left: 210px;
+    }
+}
+
+@media(max-width: 768px) {
+    #sidebarToggle {
+        display: block;
+    }
+
+    .slidebar {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+
+    .slidebar.active {
+        transform: translateX(0);
+    }
+
+    .navbar-collapse {
+        display: none !important;
+    }
+    
+    .dropdown-item {
+        color: #fff;
+        padding: 10px 16px;
+        margin-left: 20px;
+    }
+
+    .main-content {
+        padding-left: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="scenic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<ul class="slidebar">
+    <div class="search-box mb-3 px-2">
+        <div class="search-container">
+            <div class="input-group">
+                <span class="input-group-text bg-primary text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </span>
+                <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+            </div>
+            <div id="searchSuggestions" class="suggestions-box hidden"></div>
+        </div>
+    </div>
+    <li><a class="txt-home" href="home.html">Home</a></li>
+    <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="nav-link actived txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="scenic-spot.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+
+<main class="main-content">
+    <div class="hero-banner">
+        <div class="container position-relative">
+            <a href="categories.html" class="btn btn-sm btn-outline-light position-absolute start-0 top-0"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <h1>Hotels & Luxury Resorts</h1>
+            <p>Unwind inside stunning hotel zones featuring world-class compound amenities</p>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <div class="row" id="hotelList">
+            <!-- Hotel Card 1: Hotel Max -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="business">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotelmax.jpg" alt="Hotel Max">
+                        <div class="tag-badge">Business Hotels</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>Hotel Max</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>Hotel Zone, Dekkhina Thiri Township, Naypyitaw</div>
+                        <div class="info-line"><i class="fa-solid fa-water"></i> Swimming Pool, Fitness Center & Spa</div>
+                        <a href="hotel-max.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 2: Star World Hotel -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="business">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel2.jpg" alt="Star World Hotel">
+                        <div class="tag-badge">Business Hotels</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>Star World Hotel</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>Yaza Thingaha Road, Hotel Zone (1), Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-spa"></i> Restaurant, Spa & 24-Hour Front Desk</div>
+                        <a href="star-world.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 3: M Gallery Hotel -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="luxury">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel3.jpg" alt="M Gallery Hotel">
+                        <div class="tag-badge">Luxury Resorts</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>M Gallery Hotel</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>National Guest House Road, Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-swimming-pool"></i> Lakeside Haven, Luxury Spa & Fine Dining</div>
+                        <a href="mgallery.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 4: Nirvana Hotel and Resort -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="luxury">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel4.jpeg" alt="Nirvana Hotel and Resort">
+                        <div class="tag-badge">Luxury Resorts</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>Nirvana Hotel and Resort</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>Yaza Thingaha Road, Hotel Zone (1), Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-seedling"></i> Garden Views, Restaurant & Cozy Rooms</div>
+                        <a href="nirvana.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 5: Thingaha Hotel -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="luxury">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel5.avif" alt="Thingaha Hotel">
+                        <div class="tag-badge">Luxury Resorts</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>Thingaha Hotel</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>Yaza Thingaha Road, Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-dumbbell"></i> Indoor/Outdoor Pools, Spa & Fitness Center</div>
+                        <a href="thingaha.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 6: PARKROYAL Hotel -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="luxury">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel6.webp" alt="PARKROYAL Hotel">
+                        <div class="tag-badge">Luxury Resorts</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>PARKROYAL Hotel</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i> Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-dumbbell"></i> Indoor/Outdoor Pools, Spa & Fitness Center</div>
+                        <a href="PARKROYAL.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Card 7: The Golden Lake Hotel -->
+            <div class="col-md-4 col-sm-6 hotel-item" data-category="luxury">
+                <div class="content-card">
+                    <div class="img-wrapper">
+                        <img src="npt photos/hotel7.jpg" alt="The Golden Lake Hotel">
+                        <div class="tag-badge">Luxury Resorts</div>
+                    </div>
+                    <div class="card-body-content">
+                        <h3>The Golden Lake Hotel</h3>
+                        <div class="info-line"><i class="fa-solid fa-location-dot"></i>Prominent Hotel Zone (1), Dekkhina Thiri Township</div>
+                        <div class="info-line"><i class="fa-solid fa-dumbbell"></i> Indoor/Outdoor Pools, Spa & Fitness Center</div>
+                        <a href="The Golden Lake.html" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+<script>
+const localization = {
+    en: {
+        langBtn: "မြန်မာ",
+        brand: "Naypyitaw Directory",
+        home: "Home",
+        categories: "Categories",
+        edu: "Education",
+        scenic: "Scenic Spots",
+        markets: "Markets",
+        hotels: "Hotels",
+        about: "About",
+        trip: "Trip planning",
+        contact: "Contact",
+        searchPlaceholder: "Search...",
+        footer: "© 2026 Naypyitaw. All Rights Reserved."
+    },
+    my: {
+        langBtn: "English",
+        brand: "နေပြည်တော် လမ်းညွှန်",
+        home: "ပင်မစာမျက်နှာ",
+        categories: "ကဏ္ဍများ",
+        edu: "ပညာရေး",
+        scenic: "အပန်းဖြေနေရာများ",
+        markets: "စျေးဝယ်ရန်နေရာများ",
+        hotels: "ဟိုတယ်များ",
+        about: "ကျွန်ုပ်တို့အကြောင်း",
+        trip: "ခရီးစဉ်စီစဉ်ခြင်း",
+        contact: "ဆက်သွယ်ရန်",
+        searchPlaceholder: "ရှာဖွေရန်...",
+        footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။"
+    }
+};
+
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+function updateLanguage() {
+    const data = localization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', updateLanguage);
+
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+
+document.querySelectorAll(".slidebar a").forEach(link => {
+    link.onclick = function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+    };
+});
+</script>
+</body>
+</html>

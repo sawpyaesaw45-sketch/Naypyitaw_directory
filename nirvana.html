@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nirvana-hotel-and-resort</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f7f9; scroll-behavior: smooth; }
+        .navbar-brand {
+            font-size: 3.5vh; font-weight: bolder; color: #E4B34F !important; white-space: nowrap;
+        }
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: #114B5F; z-index: 3000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-nav .nav-link {
+            position: relative; margin: 0 10px; font-size: 2.5vh; font-weight: 500; color: rgba(255, 255, 255, 0.85) !important; transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+        .nav-lang-btn {
+            background: #E4B34F; color: #114B5F !important; border: none; font-weight: 600; padding: 4px 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 2.2vh; margin-left: 15px;
+        }
+        
+        .slidebar {
+            position: fixed; top: 70px; left: 0; width: 210px; height: calc(100vh - 70px); background: #165266; list-style: none; z-index: 2500; transition: .35s; border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .slidebar li a { display: block; color: rgba(255, 255, 255, 0.9); padding: 12px 15px; text-decoration: none; font-size: 2.5vh; }
+        .slidebar li a:hover, .slidebar li a.actived { background-color: #114B5F; color: #E4B34F; }
+        /* Dropdown Menu Theme */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar Responsive Layout */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px);
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+/* Search Box Container */
+.search-box {
+    margin-top: 15px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+/* Suggestions List UI */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+/* Hide elements utility */
+.hidden {
+    display: none !important;
+}
+/* Custom Center Alert Box Styles */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* Split Framework Structural Content Layout */
+#home {
+    padding-top: 70px;
+    padding-left: 210px; /* Positions layout area after sidebar ends */
+    min-height: 100vh;
+    background-color: #f4f6f7;
+    display: flex;
+    position: relative;
+}
+
+/* Scroll-linked text lane container sitting between sidebar and image wrapper */
+.scroll-text-container {
+    width: 55%;
+    padding: 40px;
+    padding-bottom: 250px; /* Grants fluid empty buffer scrolling track clearance */
+}
+
+/* Sticky Image Viewport Column on the right hand end frame */
+.sticky-image-container {
+    width: 45%;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    background-color: #0d2a35;
+}
+.sticky-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease-in-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Text Section Spacing Blocks */
+.scroll-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 80px;
+}
+.info-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border: none;
+    padding: 45px;
+    transition: transform 0.3s ease;
+}
+.park-badge {
+    background-color: rgba(17, 75, 95, 0.1);
+    color: #114B5F;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.info-card h2 {
+    color: #114B5F;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.info-card p {
+    color: #556366;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+.quick-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 25px;
+}
+.meta-pill {
+    background: #f8fafb;
+    border-left: 4px solid #E4B34F;
+    padding: 12px 16px;
+    border-radius: 0 12px 12px 0;
+}
+.meta-pill strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #8c9ba5;
+}
+.meta-pill span {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+        .logout-item a { color: #ff6b6b !important; }
+        .logout-item a:hover { background-color: #5c1d1d !important; color: #fff !important; }
+
+        footer {
+            background: #114B5F; color: rgba(255, 255, 255, 0.7); text-align: center; padding: 12px 0; position: fixed; bottom: 0; width: 100%; z-index: 2600; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px;
+        }
+        footer p { margin: 0; font-size: 0.9rem; }
+        .main-content { margin-top: 70px; padding-left: 210px; min-height: calc(100vh - 120px); }
+        .details-container { padding: 40px 50px; max-width: 1200px; margin: 0 auto; }
+        
+        .hotel-title-header {
+            margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        }
+        .hotel-title-header h1 { font-family: 'Playfair Display', serif; color: #114B5F; font-weight: 700; font-size: 2.5rem; margin: 0; }
+        
+        /* 🔙 Back To Hotels Page Button Style */
+        .back-to-hotels-btn {
+            background-color: transparent; color: #114B5F; border: 2px solid #114B5F; padding: 8px 18px; font-weight: 600; font-size: 0.95rem; border-radius: 8px; text-decoration: none; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .back-to-hotels-btn:hover { background-color: #114B5F; color: #E4B34F; transform: translateX(-3px); }
+
+        .split-details-layout { display: flex; gap: 40px; position: relative; }
+        .content-scroll-side { flex: 1.2; padding-bottom: 100px; } /* အောက်ဆုံး Card အတွက် နေရာလွတ် ချန်ပေးခြင်း */
+        
+        .image-sticky-side {
+            flex: 0.8; position: sticky; top: 110px; height: 450px; align-self: flex-start;
+        }
+        .info-block-item {
+            background: #ffffff; padding: 35px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); border: 1px solid #eef2f5; 
+            margin-bottom: 350px; 
+            transition: all 0.3s ease;
+        }
+        
+        .info-block-item.active-section { border-color: #E4B34F; box-shadow: 0 6px 20px rgba(17, 75, 95, 0.05); }
+        .section-tag { font-size: 0.8rem; text-transform: uppercase; color: #E4B34F; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
+        .info-block-item h3 { color: #114B5F; font-weight: 700; font-size: 1.5rem; margin-bottom: 18px; }
+        .info-block-item p { color: #556870; font-size: 0.98rem; line-height: 1.75; margin-bottom: 0; }
+
+        .photo-sticky-frame { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07); border: 5px solid #ffffff; position: relative; background: #eaeaea; }
+        .dynamic-target-img, .map-container-target { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; visibility: hidden; transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s; }
+        .dynamic-target-img.active-img, .map-container-target.active-img { opacity: 1; visibility: visible; z-index: 2; }
+
+        .price-highlight { font-size: 1.6rem; color: #114B5F; font-weight: 700; margin-top: 15px; margin-bottom: 15px; }
+        .price-highlight span { font-size: 0.85rem; color: #778890; font-weight: normal; }
+
+        .book-now-action-btn {
+            background: #114B5F; color: #E4B34F !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px; width: fit-content; margin-top: 10px; transition: all 0.3s ease; border: 1px solid #114B5F;
+        }
+        .book-now-action-btn:hover { background: #1A5F76; color: #ffffff !important; border-color: #1A5F76; transform: translateY(-2px); }
+
+        .map-wrapper-link { display: block; width: 100%; height: 100%; position: relative; }
+        .map-overlay-hint { position: absolute; inset: 0; background: rgba(17, 75, 95, 0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.1rem; opacity: 0; transition: opacity 0.3s; z-index: 5; }
+        .map-wrapper-link:hover .map-overlay-hint { opacity: 1; }
+
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; z-index: 2000; }
+        .sidebar-overlay.show { display: block; }
+        #sidebarToggle { display: none; }
+
+        @media (max-width: 992px) {
+            .main-content { padding-left: 0; }
+            .split-details-layout { flex-direction: column; }
+            .image-sticky-side { position: relative; top: 0; height: 300px; width: 100%; order: -1; margin-bottom: 25px; }
+            .details-container { padding: 25px 20px; }
+            .info-block-item { margin-bottom: 40px; }
+            .hotel-title-header { flex-direction: column; align-items: flex-start; }
+            .back-to-hotels-btn { order: -1; }
+            
+        }
+        @media(max-width: 768px) {
+    #sidebarToggle { display: block; }
+    .slidebar { transform: translateX(-100%); width: 260px; }
+    .slidebar.active { transform: translateX(0); }
+    .navbar-collapse { display: none !important; }
+    #home { padding-top: 80px; padding-left: 15px; padding-right: 15px; }
+    .quick-meta-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link active txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="scenic.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="markets.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item"><button class="nav-lang-btn" id="langToggle">မြန်မာ</button></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<ul class="slidebar">
+    <!-- Search Box Container -->
+<div class="search-box mb-3 px-2">
+    <div class="search-container">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+        </div>
+        <!-- Search Suggestions Dropdown -->
+        <div id="searchSuggestions" class="suggestions-box hidden"></div>
+    </div>
+</div>
+    <li><a class="txt-home" href="home.html">Home</a></li>
+    <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="nav-link actived txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="scenic.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="markets.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip-planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+    
+</ul>
+<div class="main-content">
+    <div class="details-container">
+        
+        <div class="hotel-title-header">
+            <h1>Nirvana Hotel and Resort</h1>
+            <a href="hotels.html" class="back-to-hotels-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Hotels
+            </a>
+        </div>
+
+        <div class="split-details-layout">
+            
+            <div class="content-scroll-side">
+                
+                <!-- 1. Overview -->
+                <div class="info-block-item active-section" id="sec-overview" data-img-target="img-overview">
+                <span class="park-badge" id="lblB1">Overview</span>
+                <h2 id="lblT1">Nirvana Hotel and Resort</h2>
+                <p id="lblD1">Nirvana Hotel and Resort is a peaceful oasis in Nay Pyi Taw, offering a blend of traditional hospitality, lush tropical gardens, and relaxing resort amenities for an unforgettable stay.</p>
+                </div>
+
+                <!-- 2. Services -->
+                <div class="info-block-item" id="sec-services" data-img-target="img-services">
+                <span class="park-badge" id="lblB2">Services</span>
+                <h2 id="lblT2">Resort Facilities & Hospitality</h2>
+                <p id="lblD2">Enjoy a wide range of resort services including an outdoor swimming pool, recreational spaces, traditional dining options, and attentive guest care.</p>
+                </div>
+
+                <!-- 3. Decorations -->
+                <div class="info-block-item" id="sec-architecture" data-img-target="img-architecture">
+                <span class="park-badge" id="lblB3">Decorations</span>
+                <h2 id="lblT3">Tropical Architecture & Design</h2>
+                <p id="lblD3">Featuring charming resort architecture with open-air pavilions, wooden accents, and cozy interiors that harmonize seamlessly with the surrounding nature.</p>
+                </div>
+
+                <!-- 4. Environment -->
+                <div class="info-block-item" id="sec-environment" data-img-target="img-environment">
+                <span class="park-badge" id="lblB4">Environment</span>
+                <h2 id="lblT4">Lush & Tranquil Grounds</h2>
+                <p id="lblD4">Immersed in extensive greenery, beautiful gardens, and calm pathways that create a refreshing sanctuary away from the hustle and bustle of city life.</p>
+                </div>
+
+                <!-- 5. Location -->
+                <div class="info-block-item" id="sec-location" data-img-target="img-location">
+                <span class="park-badge" id="lblB5">Location</span>
+                <h2 id="lblT5">Convenient Resort Setting</h2>
+                <p id="lblD5">Situated in a quiet and accessible area of Nay Pyi Taw, providing a peaceful retreat while keeping key city attractions within easy reach.</p>
+                <a href="https://www.agoda.com/nirvana-hotel-and-resort/hotel/nay-pyi-taw-mm.html?cid=1844104&ds=DXD9KCWt1KZWhVWA" class="action-link">Check Details <i class="fa-solid fa-chevron-right ms-1"></i></a>
+                </div>
+
+            </div>
+
+            <div class="image-sticky-side">
+                <div class="photo-sticky-frame">
+                    
+                    <img id="img-overview" class="dynamic-target-img active-img" src="npt photos\nirhotel1.webp" alt="Overview Image">
+                    
+                    <img id="img-services" class="dynamic-target-img" src="npt photos\nirhotel2.webp" alt="Services Image">
+                    
+                    <img id="img-architecture" class="dynamic-target-img" src="npt photos\nirhotel3.webp" alt="Decorations Image">
+
+                    <img id="img-environment" class="dynamic-target-img" src="npt photos\nirhotel4.webp" alt="Environment Image">
+                    
+                    <div id="img-location" class="map-container-target">
+                        <iframe id="stickyTargetMap" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100290.48704680787!2d96.06476669851241!3d19.754048401576828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c8bdf553c5eeb5%3A0x595ea5e37518aa39!2sNirvana%20Hotel%20%26%20Resort!5e1!3m2!1sen!2smm!4v1785565732143!5m2!1sen!2smm" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p id="footerText">© 2026 Naypyitaw. All Rights Reserved.</p>
+</footer>
+<!-- Custom Center Alert Box -->
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+<script>
+// Multi-Language Dictionary
+const localization = {
+    en: {
+        langBtn: "မြန်မာ", 
+        brand: "Naypyitaw Directory",
+        home: "Home", 
+        categories: "Categories",
+        edu: "Education",
+        scenic: "Scenic Spots",
+        markets: "Markets",
+        hotels: "Hotels",
+        about: "About", 
+        trip: "Trip planning", 
+        contact: "Contact", 
+        logout: "Log Out", 
+        footer: "© 2026 Naypyitaw. All Rights Reserved.",
+        b1: "Overview", t1: "Nirvana Hotel and Resort", d1: "Nirvana Hotel and Resort is a peaceful oasis in Nay Pyi Taw, offering a blend of traditional hospitality, lush tropical gardens, and relaxing resort amenities for an unforgettable stay.",
+        b2: "Services", t2: "Resort Facilities & Hospitality", d2: "Enjoy a wide range of resort services including an outdoor swimming pool, recreational spaces, traditional dining options, and attentive guest care.",
+        b3: "Decorations", t3: "Tropical Architecture & Design", d3: "Featuring charming resort architecture with open-air pavilions, wooden accents, and cozy interiors that harmonize seamlessly with the surrounding nature.",
+        b4: "Environment", t4: "Lush & Tranquil Grounds", d4: "Immersed in extensive greenery, beautiful gardens, and calm pathways that create a refreshing sanctuary away from the hustle and bustle of city life.",
+        b5: "Location", t5: "Convenient Resort Setting", d5: "Situated in a quiet and accessible area of Nay Pyi Taw, providing a peaceful retreat while keeping key city attractions within easy reach."
+    },
+    my: {
+        langBtn: "English", 
+        brand: "နေပြည်တော် လမ်းညွှန်", 
+        home: "ပင်မစာမျက်နှာ", 
+        categories: "ကဏ္ဍများ",
+        edu: "ပညာရေး",
+        scenic: "အပန်းဖြေနေရာများ",
+        markets: "စျေးဝယ်ရန်နေရာများ",
+        hotels: "ဟိုတယ်များ",
+        about: "ကျွန်ုပ်တို့အကြောင်း", 
+        trip: "ခရီးစဉ်စီစဉ်ခြင်း", 
+        contact: "ဆက်သွယ်ရန်", 
+        logout: "ထွက်ရန်",
+        footer: "© ၂၀၂၆ နေပြည်တော်။ မူပိုင်ခွင့်အားလုံး ရရှိပြီးဖြစ်သည်။",
+        b1: "ခြုံငုံသုံးသပ်ချက်", t1: "Nirvana Hotel and Resort", d1: "Nirvana Hotel and Resortသည် နေပြည်တော်ရှိ အေးချမ်းသာယာသော အပန်းဖြေစခန်းတစ်ခုဖြစ်ပြီး ရိုးရာဧည့်ဝတ်ကျေပွန်မှု၊ စိမ်းလန်းစိုပြည်သော သစ်ပင်ပန်းမန်များနှင့် သက်တောင့်သက်သာရှိသော အပန်းဖြေဝန်ဆောင်မှုများကို ပေးအပ်ပါသည်။",
+        b2: "ဝန်ဆောင်မှုများ", t2: "အပန်းဖြေစခန်း ဝန်ဆောင်မှုများနှင့် ဧည့်ဝတ်ပြုမှု", d2: "ရေကူးကန်၊ အနားယူရာနေရာများ၊ ရိုးရာစားသောက်ဆိုင်များနှင့် ဂရုစိုက်မှုအပြည့်ရှိသော ဧည့်ခံဝန်ဆောင်မှုများကို ခံစားနိုင်ပါသည်။",
+        b3: "အပြင်အဆင်များ", t3: "အပန်းဖြေစခန်းဒီဇိုင်းနှင့် ဗိသုကာလက်ရာများ", d3: "သဘာဝပတ်ဝန်းကျင်နှင့် လိုက်ဖက်ညီသော ပွင့်လင်းသည့် အဆောက်အအုံဒီဇိုင်းများ၊ သစ်သားအလှဆင်လက်ရာများနှင့် သက်တောင့်သက်သာရှိသော အတွင်းခန်းများကို တွေ့မြင်ရမည်ဖြစ်ပါသည်။",
+        b4: "ပတ်ဝန်းကျင်", t4: "စိမ်းလန်းစိုပြည်ပြီး ငြိမ်သက်အေးချမ်းသော ပတ်ဝန်းကျင်", d4: "ကျယ်ဝန်းသည့် ဥယျာဉ်များနှင့် သဘာဝရှုခင်းများက မြို့ပြရုန်းရင်းဆန်ခတ်မှုမှ ကင်းဝေးစေပြီး လန်းဆန်းတက်ကြွမှုကို ပေးစွမ်းနိုင်ပါသည်။",
+        b5: "တည်နေရာ", t5: "အဆင်ပြေပြေ သွားလာနိုင်သည့် တည်နေရာ", d5: "နေပြည်တော်၏ တိတ်ဆိတ်အေးချမ်းပြီး သွားလာရလွယ်ကူသော နေရာတွင် တည်ရှိကာ အဓိကနေရာများကို အလွယ်တကူ သွားရောက်နိုင်ပါသည်။"
+    }
+};
+
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+function updateLanguage() {
+     const data = localization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('footerText').textContent = data.footer;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder || "Search...";
+
+    document.getElementById('lblB1').textContent = data.b1; document.getElementById('lblT1').textContent = data.t1; document.getElementById('lblD1').textContent = data.d1;
+    document.getElementById('lblB2').textContent = data.b2; document.getElementById('lblT2').textContent = data.t2; document.getElementById('lblD2').textContent = data.d2;
+    document.getElementById('lblB3').textContent = data.b3; document.getElementById('lblT3').textContent = data.t3; document.getElementById('lblD3').textContent = data.d3;
+    document.getElementById('lblB4').textContent = data.b4; document.getElementById('lblT4').textContent = data.t4; document.getElementById('lblD4').textContent = data.d4;
+    document.getElementById('lblB5').textContent = data.b5; document.getElementById('lblT5').textContent = data.t5; document.getElementById('lblD5').textContent = data.d5;
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+    document.querySelectorAll('.txt-logout').forEach(el => {
+        const icon = el.querySelector('i').outerHTML;
+        el.innerHTML = icon + " " + data.logout;
+    });
+}
+
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang);
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateLanguage();
+
+    const sections = document.querySelectorAll(".info-block-item");
+    const images = document.querySelectorAll(".dynamic-target-img, .map-container-target");
+
+    const observerOptions = {
+        root: null,
+        rootMargin: "-30% 0px -40% 0px", 
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                sections.forEach(sec => sec.classList.remove("active-section"));
+                entry.target.classList.add("active-section");
+
+                const targetImgId = entry.target.getAttribute("data-img-target");
+                
+                images.forEach(img => {
+                    if (img.id === targetImgId) {
+                        img.classList.add("active-img");
+                    } else {
+                        img.classList.remove("active-img");
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+});
+
+// Mobile Sidebar Drawer Actions
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+if(toggle) {
+    toggle.onclick = function () {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("show");
+    };
+}
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+</script>
+</body>
+</html>

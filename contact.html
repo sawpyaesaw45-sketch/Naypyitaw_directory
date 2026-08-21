@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Naypyitaw Directory</title>
+
+<!-- Core Framework Style Links -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<!-- EmailJS SDK Integration -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+/* --- GLOBAL BASICS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Add to your existing <style> block */
+body {
+    font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    background: url('https://www.shutterstock.com/image-illustration/myanmar-government-building-nay-pyi-260nw-1992915101.jpg') no-repeat center center/cover fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Create the dark filter overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(8px);
+    background-color: rgba(17, 75, 95, 0.7); /* Slightly darker for better text readability */
+    z-index: -1; /* Keeps the background behind your content */
+}
+/* Navbar */
+.navbar-brand {
+    font-size: 3.5vh;
+    font-weight: bolder;
+    color: #E4B34F !important; /* Elegant Gold */
+    white-space: nowrap;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #114B5F; /* Refined Deep Teal */
+    z-index: 3000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.nav-item {
+    background-color: transparent;
+}
+.nav-link {
+    color: rgb(255, 255, 255);
+}
+.navbar-nav .nav-link {
+    position: relative;
+    margin: 0 10px;
+    font-size: 2.5vh;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #E4B34F !important;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background: #E4B34F;
+    border-radius: 3px;
+}
+
+/* Nav Language Button Layout */
+.nav-lang-btn {
+    background: #E4B34F;
+    color: #114B5F !important;
+    border: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 2.2vh;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+.nav-lang-btn:hover {
+    background: white;
+    color: #114B5F !important;
+}
+
+/* Dropdown Menu Theme */
+.dropdown-menu {
+    background-color: #114B5F;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+    color: #fff;
+    font-size: 2.2vh;
+}
+
+.dropdown-item:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* Sidebar Responsive Layout Fixes */
+.slidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 210px;
+    height: calc(100vh - 70px); /* Fluid display calculation height */
+    background: #165266;
+    list-style: none;
+    z-index: 2500;
+    transition: .35s;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.slidebar li a {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 12px 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 2.5vh;
+}
+
+.slidebar li a:hover {
+    background-color: #1A5F76;
+    color: #E4B34F;
+    padding-left: 20px;
+}
+
+.slidebar li a.actived {
+    background-color: #114B5F;
+    color: #E4B34F;
+    font-weight: bold;
+    border-left: 4px solid #E4B34F;
+}
+
+/* Search Box Layout Alignment Fixes */
+/* Search Box Container */
+.search-box {
+    margin-top: 15px;
+}
+
+.search-box .form-control {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+}
+
+.search-box .input-group-text {
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+}
+
+/* Suggestions List UI */
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 3500;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+    color: #114B5F;
+    font-weight: bold;
+}
+
+/* Hide elements utility */
+.hidden {
+    display: none !important;
+}
+/* Custom Center Alert Box Styles */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.custom-alert-box {
+    background: #114B5F;
+    color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
+    border: 2px solid #E4B34F;
+    animation: popup 0.3s ease-in-out;
+}
+
+.custom-alert-box h4 {
+    color: #E4B34F;
+    margin-bottom: 10px;
+}
+
+.custom-alert-box button {
+    margin-top: 15px;
+    padding: 6px 25px;
+    border-radius: 20px;
+}
+
+@keyframes popup {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* --- RIGHT MAIN CONTENT AREA --- */
+.content-area {
+    flex: 1;
+    margin-left: 210px; 
+   padding-top: 100px;
+    padding-bottom: 60px;
+    padding-left: 240px; /* Adjust this number to perfectly clear your sidebar width */
+    padding-right: 20px;
+}
+
+/* --- CONTACT MODULE CARDS & FORM --- */
+.contact-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    padding: 35px;
+    border: 1px solid #eef2f5;
+}
+
+.contact-title {
+    color: #114B5F;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-icon {
+    width: 45px;
+    height: 45px;
+    background-color: rgba(17, 75, 95, 0.1);
+    color: #114B5F;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.info-text a {
+    color: #114B5F;
+    text-decoration: none;
+    font-weight: 600;
+}
+.info-text a:hover {
+    text-decoration: underline;
+    color: #0d6efd;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #114B5F;
+}
+
+.form-control:focus {
+    border-color: #114B5F;
+    box-shadow: 0 0 0 0.25rem rgba(17, 75, 95, 0.25);
+}
+
+.btn-submit {
+    background-color: #114B5F;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-submit:disabled {
+    background-color: #5c7f8a;
+    cursor: not-allowed;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background-color: #1A5F76;
+    color: #E4B34F;
+}
+
+/* --- FIXED BASELINE FOOTER --- */
+footer {
+    background: #114B5F;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 12px 0;
+    position: relative; /* Changed from sticky to relative */
+    width: 100%;
+    z-index: 2600;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Overlay Layer */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+#sidebarToggle {
+    display: none;
+}
+/* --- CUSTOM TOAST NOTIFICATION --- */
+.custom-toast {
+    position: fixed;
+    bottom: -100px; /* Hidden off-screen by default */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #114B5F; /* Deep Teal matching your theme */
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    border: 2px solid #E4B34F; /* Gold border accent */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Class to slide the toast up and show it */
+.custom-toast.show {
+    bottom: 40px; /* Elegant bottom spacing */
+    opacity: 1;
+}
+/* Responsive Breakpoints */
+@media(max-width: 992px) {
+    .content-area {
+        padding-left: 20px;
+    }
+}
+
+@media(max-width: 768px) {
+    #sidebarToggle {
+        display: block;
+    }
+    .slidebar {
+        transform: translateX(-100%);
+        width: 260px;
+        top: 70px;
+        height: calc(100vh - 70px);
+    }
+    .slidebar.active {
+        transform: translateX(0);
+    }
+    .navbar-collapse {
+        display: none !important;
+    }
+    .content-area {
+        margin-left: 0;
+        padding: 20px;
+    }
+    .dropdown-item {
+        color: #fff;
+        padding: 10px 16px;
+        margin-left: 20px;
+    }
+}
+</style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="120" tabindex="0">
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <button class="btn btn-outline-light d-lg-none me-2" id="sidebarToggle">
+            <span style="font-size:24px;">☰</span>
+        </button>
+        <a class="navbar-brand ms-auto pe-2" href="#" id="navBrand">Naypyitaw Directory</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link  txt-home" href="home.html">Home</a></li>
+                <li class="nav-item dropdown">
+                    <div class="btn-group">
+                        <a class="nav-link  txt-categories" href="categories.html">Categories</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                            <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                            <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                            <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+                        </ul>
+                    </div>
+                </li>
+                 <li class="nav-item"><a class="nav-link txt-trip" href="trip planning.html">Trip planning</a></li>
+                <li class="nav-item"><a class="nav-link txt-about" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link active txt-contact" href="contact.html">Contact</a></li>
+                <li class="nav-item">
+                    <button class="nav-lang-btn" id="langToggle">မြန်မာ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- Mobile Sidebar -->
+<ul class="slidebar">
+    <!-- Search Box Container -->
+<div class="search-box mb-3 px-2">
+    <div class="search-container">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </span>
+            <input type="text" class="form-control" id="sidebarSearch" placeholder="Search..." autocomplete="off" />
+        </div>
+        <!-- Search Suggestions Dropdown -->
+        <div id="searchSuggestions" class="suggestions-box hidden"></div>
+    </div>
+</div>
+    <li><a class=" txt-home " href="home.html">Home</a></li>
+   <li class="nav-item dropdown">
+        <div class="btn-group">
+            <a class="nav-link  txt-categories" href="categories.html">Categories</a>
+            <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item txt-edu" href="education.html">Education</a></li>
+                <li><a class="dropdown-item txt-scenic" href="senic-spot.html">Scenic Spots</a></li>
+                <li><a class="dropdown-item txt-markets" href="market.html">Markets</a></li>
+                <li><a class="dropdown-item txt-hotels" href="hotels.html">Hotels & Resorts</a></li>
+            </ul>
+        </div>
+    </li>
+    <li><a class="txt-trip" href="trip planning.html">Trip planning</a></li>
+    <li><a class="txt-about" href="about.html">About</a></li>
+    <li><a class="txt-contact actived" href="contact.html">Contact</a></li>
+    <li class="mt-4 px-3">
+        <button class="btn w-100 btn-warning text-dark fw-bold btn-sm rounded-pill" id="langToggleMobile">မြန်မာ</button>
+    </li>
+</ul>
+<!-- Header Navbar Navigation Module -->
+
+
+<!-- Main Display Workspace Panel Area -->
+<div class="main-wrapper">
+    <main class="content-area">
+        <div class="container-fluid">
+            <div class="row g-4">                              
+                <div class="col-lg-7">
+                    <div class="contact-card">
+                        <h3 class="contact-title" id="formTitle">Send Us a Message</h3>
+                        
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <label for="userName" class="form-label" id="lblName">Your Name</label>
+                                <input type="text" class="form-control py-2" id="userName" required placeholder="Enter your name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="userSubject" class="form-label" id="lblSubject">Subject</label>
+                                <input type="text" class="form-control py-2" id="userSubject" required placeholder="What is this about?">
+                            </div>
+                            <div class="mb-3">
+                                <label for="userMessage" class="form-label" id="lblMsg">Message</label>
+                                <textarea class="form-control" id="userMessage" rows="5" required placeholder="Write your message here..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit w-100" id="btnSubmit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+<!-- Custom Elegant Toast Notification Container -->
+<div id="customToast" class="custom-toast">
+    <span id="toastIcon">🚀</span>
+    <span id="toastMessage">Message Sent!</span>
+</div>
+<!-- Custom Center Alert Box -->
+<div id="customAlertModal" class="custom-alert-overlay hidden">
+    <div class="custom-alert-box">
+        <h4 id="alertTitle">Not Found</h4>
+        <p id="alertMessage">No results found.</p>
+        <button id="closeAlertBtn" class="btn btn-warning fw-bold">OK</button>
+    </div>
+</div>
+<!-- Bootstrap Bundle JS Component package -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="search.js"></script>
+<script>
+    const localization = {
+    en: {
+        langBtn: "မြန်မာ",
+        brand: "Naypyitaw Directory",
+        title: "Explore Naypyitaw",
+        home: "Home",
+        categories: "Categories",
+        edu: "Education",
+        scenic: "Scenic Spots",
+        markets: "Markets",
+        hotels: "Hotels & Resorts",
+        about: "About",
+        trip: "Trip planning",
+        contact: "Contact",
+        searchPlaceholder: "Search...",
+        explore: "Explore More",
+        footer: "© 2026 Naypyitaw. All Rights Reserved.",
+       infoTitle: "Get In Touch",
+            formTitle: "Send Us a Message",
+            lblName: "Your Name",
+            lblSubject: "Subject",
+            lblMsg: "Message",
+            btnSubmit: "Send Message",
+            locText: "Pobbathiri Township, Naypyitaw"
+    },
+    my: {
+        langBtn: "English",
+        brand: "နေပြည်တော် လမ်းညွှန်",
+        title: "နေပြည်တော်တစ်ခွင် ရှာဖွေစို့",
+        home: "ပင်မစာမျက်နှာ",
+        categories: "ကဏ္ဍများ",
+        edu: "ပညာရေး",
+        scenic: "အပန်းဖြေနေရာများ",
+        markets: "စျေးဝယ်ရန်နေရာများ",
+        hotels: "ဟိုတယ်နှင့် ရီဆော့တ်များ",
+        about: "ကျွန်ုပ်တို့အကြောင်း",
+        trip: "ခရီးစီစဉ်ခြင်း",
+        contact: "ဆက်သွယ်ရန်",
+        searchPlaceholder: "ရှာဖွေရန်...",
+        explore: "အသေးစိတ်ကြည့်ရန်",
+        footer: "© 2026 Naypyitaw. All Rights Reserved.",
+        infoTitle: "ဆက်သွယ်ရန်",
+            formTitle: "အကြံပြုစာပေးပို့ရန်",
+            lblName: "သင့်အမည်",
+            lblSubject: "အကြောင်းအရာ",
+            lblMsg: "ပေးပို့လိုသောစာ",
+            btnSubmit: "မက်ဆေ့ခ်ျပို့ရန်",
+            locText: "ပုဗ္ဗသီရိမြို့နယ်၊ နေပြည်တော်"
+    }
+};
+let currentLang = localStorage.getItem('globalLanguage') || 'en';
+
+function updateLanguage() {
+    const data = localization[currentLang];
+    
+    document.getElementById('langToggle').textContent = data.langBtn;
+    document.getElementById('langToggleMobile').textContent = data.langBtn;
+    document.getElementById('navBrand').textContent = data.brand;
+    document.getElementById('sidebarSearch').placeholder = data.searchPlaceholder;
+
+    document.querySelectorAll('.txt-home').forEach(el => el.textContent = data.home);
+    document.querySelectorAll('.txt-categories').forEach(el => el.textContent = data.categories);
+    document.querySelectorAll('.txt-edu').forEach(el => el.textContent = data.edu);
+    document.querySelectorAll('.txt-scenic').forEach(el => el.textContent = data.scenic);
+    document.querySelectorAll('.txt-markets').forEach(el => el.textContent = data.markets);
+    document.querySelectorAll('.txt-hotels').forEach(el => el.textContent = data.hotels);
+    document.querySelectorAll('.txt-about').forEach(el => el.textContent = data.about);
+    document.querySelectorAll('.txt-trip').forEach(el => el.textContent = data.trip);
+    document.querySelectorAll('.txt-contact').forEach(el => el.textContent = data.contact);
+
+    document.getElementById('formTitle').textContent = data.formTitle;
+    document.getElementById('lblName').textContent = data.lblName;
+    document.getElementById('lblSubject').textContent = data.lblSubject;
+    document.getElementById('lblMsg').textContent = data.lblMsg;
+    document.getElementById('btnSubmit').textContent = data.btnSubmit;
+}
+// 2. INTERNAL CONTENT TRANSLATION UPDATE ENGINE
+const switchAction = () => {
+    currentLang = currentLang === 'en' ? 'my' : 'en';
+    localStorage.setItem('globalLanguage', currentLang); 
+    updateLanguage();
+};
+document.getElementById('langToggle').addEventListener('click', switchAction);
+document.getElementById('langToggleMobile').addEventListener('click', switchAction);
+
+window.addEventListener('storage', (e) => {
+    if (e.key === 'globalLanguage') {
+        currentLang = e.newValue || 'en';
+        updateLanguage();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', updateLanguage);
+
+// Sidebar Drawer Control Mechanics
+const sidebar = document.querySelector(".slidebar");
+const overlay = document.getElementById("overlay");
+const toggle = document.getElementById("sidebarToggle");
+
+toggle.onclick = function () {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("show");
+};
+overlay.onclick = function () {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("show");
+};
+document.querySelectorAll(".slidebar a").forEach(link => {
+    link.onclick = function () {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+    };
+});
+
+// Automatically catch language switch custom events fired from global-nav.js
+window.addEventListener('languageChanged', (e) => {
+    const lang = e.detail.lang;
+    translateLocalContent(lang);
+    
+});
+
+// Run rendering processes immediately upon frame component installation
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('globalLanguage') || 'en';
+    
+    // Fixes the space vs hyphen link variance gracefully
+    setTimeout(() => {
+        document.querySelectorAll('a[href="trip planning.html"]').forEach(el => {
+            el.setAttribute('href', 'trip planning.html');
+        });
+    }, 100);
+});
+// DUAL LANGUAGE MUTATION DATASHEET DICTIONARY
+// DUAL LANGUAGE MUTATION DATASHEET DICTIONARY
+
+
+    // Update the local elements
+    
+
+
+// Initialize EmailJS Engine
+(function() {
+    emailjs.init("G7wmZJ6V3YbeZV0CV"); 
+})();
+
+// EMAILJS LIVE SUBMISSION CONTROLLER PIPELINE
+// Helper Function to trigger the custom toast alert
+function showToast(message, isSuccess = true) {
+    const toast = document.getElementById('customToast');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastIcon = document.getElementById('toastIcon');
+    
+    // Set content dynamically
+    toastMessage.textContent = message;
+    toastIcon.textContent = isSuccess ? "🚀" : "❌";
+    
+    // Switch border highlight depending on state
+    toast.style.borderColor = isSuccess ? "#E4B34F" : "#ff4d4d";
+    
+    // Animate into view
+    toast.classList.add('show');
+    
+    // Automatically hide after 4 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
+}
+
+// EMAILJS LIVE SUBMISSION CONTROLLER PIPELINE (No browser alerts!)
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById('btnSubmit');
+    submitBtn.innerText = currentLang === 'en' ? "Sending..." : "ပို့နေပါသည်...";
+    submitBtn.disabled = true;
+
+    const templateParams = {
+        from_name: document.getElementById('userName').value,
+        subject: document.getElementById('userSubject').value,
+        message: document.getElementById('userMessage').value,
+        to_email: "sawpyaesaw45@gmail.com"
+    };
+
+    emailjs.send('service_b13hiqu', 'template_25dw1n8', templateParams)
+        .then(function() {
+            // Elegant localizable toast trigger
+            const successMsg = currentLang === 'en' 
+                ? "Message Sent! 🚀" 
+                : "မက်ဆေ့ခ်ျ ပို့ပြီးပါပြီ။ 🚀";
+            showToast(successMsg, true);
+            
+            document.getElementById('contactForm').reset();
+        })
+        .catch(function(error) {
+            console.error("EmailJS Error:", error);
+            
+            const errorMsg = currentLang === 'en' 
+                ? "Failed to send message. Please try again." 
+                : "ပို့ရန် အဆင်မပြေပါ။ ပြန်လည် ကြိုးစားပေးပါ။";
+            showToast(errorMsg, false);
+        })
+        .finally(() => {
+            submitBtn.innerText = currentLang === 'en' ? "Send Message" : "မက်ဆေ့ခ်ျပို့ရန်";
+            submitBtn.disabled = false;
+        });
+});
+</script>
+</body>
+</html>
